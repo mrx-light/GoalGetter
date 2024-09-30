@@ -1,30 +1,161 @@
-<div class=" h-100 d-flex justify-content-center align-items-center">
-  <form class=" reg-form">
+<div class="h-100 d-flex justify-content-center align-items-center">
+  <form class="reg-form" [formGroup]="registrationForm">
     <div class="mb-3">
       <label for="name" class="form-label">Name</label>
-      <input type="text" class="form-control" id="name" aria-describedby="Name">
+      <input
+        formControlName="name"
+        type="text"
+        class="form-control"
+        id="name"
+        aria-describedby="Name"
+      />
+      @if (
+        registrationForm.controls.name.invalid &&
+        (registrationForm.controls.name.dirty ||
+          !registrationForm.controls.name.untouched)
+      ) {
+        @if (registrationForm.controls.name.errors?.["required"]) {
+          <small class="validation">This field is required</small>
+        }
+        @if (registrationForm.controls.name.errors?.["minlength"]) {
+          <small class="validation">The name is too small</small>
+        }
+        @if (registrationForm.controls.name.errors?.["maxlength"]) {
+          <small class="validation">The name is too big</small>
+        }
+      }
     </div>
     <div class="mb-3">
       <label for="surname" class="form-label">Surname</label>
-      <input type="text" class="form-control" id="surname" aria-describedby="Surname">
+      <input
+        formControlName="surname"
+        type="text"
+        class="form-control"
+        id="surname"
+        aria-describedby="Surname"
+      />
+      @if (
+        registrationForm.controls.surname.invalid &&
+        (registrationForm.controls.surname.dirty ||
+          !registrationForm.controls.surname.untouched)
+        ) {
+        @if (registrationForm.controls.surname.errors?.["required"]) {
+          <small class="validation">This field is required</small>
+        }
+        @if (registrationForm.controls.surname.errors?.["minlength"]) {
+          <small class="validation">The surname is too small</small>
+        }
+        @if (registrationForm.controls.surname.errors?.["maxlength"]) {
+          <small class="validation">The surname is too big</small>
+        }
+      }
     </div>
     <div class="mb-3">
       <label for="username" class="form-label">Username</label>
-      <input type="text" class="form-control" id="username" aria-describedby="Username">
+      <input
+        formControlName="id"
+        type="text"
+        class="form-control"
+        id="username"
+        aria-describedby="Username"
+      />
+      @if (
+        registrationForm.controls.id.invalid &&
+        (registrationForm.controls.id.dirty ||
+          !registrationForm.controls.id.untouched)
+        ) {
+        @if (registrationForm.controls.id.errors?.["required"]) {
+          <small class="validation">This field is required</small>
+        }
+        @if (registrationForm.controls.id.errors?.["minlength"]) {
+          <small class="validation">The username is too small</small>
+        }
+        @if (registrationForm.controls.id.errors?.["maxlength"]) {
+          <small class="validation">The username is too big</small>
+        }
+        @if (registrationForm.controls.id.errors?.["idCheck"]) {
+          <small class="validation">{{registrationForm.controls.id.errors?.["idCheck"]}}</small>
+        }
+      }
     </div>
-    <div class="mb-3 ">
+    <div class="mb-3">
       <label for="mail" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="mail" aria-describedby="emailHelp">
+      <input
+        formControlName="email"
+        type="email"
+        class="form-control"
+        id="mail"
+        aria-describedby="emailHelp"
+      />
+      @if (
+        registrationForm.controls.email.invalid &&
+        (registrationForm.controls.email.dirty ||
+          !registrationForm.controls.email.untouched)
+        ) {
+        @if (registrationForm.controls.email.errors?.["required"]) {
+          <small class="validation">This field is required</small>
+        }
+        @if (registrationForm.controls.email.errors?.["email"]) {
+          <small class="validation">Please introduce a email</small>
+        }
+        @if (registrationForm.controls.email.errors?.["checkEmail"]) {
+          <small class="validation">{{registrationForm.controls.email.errors?.["checkEmail"]}}</small>
+        }
+      }
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="password">
+      <input
+        formControlName="password"
+        type="password"
+        class="form-control"
+        id="password"
+      />
+      @if (
+        registrationForm.controls.password.invalid &&
+        (registrationForm.controls.password.dirty ||
+          !registrationForm.controls.password.untouched)
+        ) {
+        @if (registrationForm.controls.password.errors?.["required"]) {
+          <small class="validation">This field is required</small>
+        }
+        @if (registrationForm.controls.password.errors?.["minlength"]) {
+          <small class="validation">The password is too small</small>
+        }
+        @if (registrationForm.controls.password.errors?.["maxlength"]) {
+          <small class="validation">The password is too big</small>
+        }
+      }
     </div>
     <div class="mb-3">
       <label for="confirmPassword" class="form-label">Confirm password</label>
-      <input type="password" class="form-control" id="confirmPassword">
+      <input
+        formControlName="confirmPassword"
+        type="password"
+        class="form-control"
+        id="confirmPassword"
+      />
+      @if (
+        registrationForm.controls.confirmPassword.invalid &&
+        (registrationForm.controls.confirmPassword.dirty ||
+          !registrationForm.controls.confirmPassword.untouched)
+        ) {
+        @if (registrationForm.controls.confirmPassword.errors?.["required"]) {
+          <small class="validation">This field is required</small>
+        }
+        @if (registrationForm.controls.confirmPassword.errors?.["minlength"]) {
+          <small class="validation">The confirm password is too small</small>
+        }
+        @if (registrationForm.controls.confirmPassword.errors?.["maxlength"]) {
+          <small class="validation">The confirm password is too big</small>
+        }
+        @if (registrationForm.controls.confirmPassword.errors?.["passwordCheck"]) {
+          <small class="validation">{{registrationForm.controls.confirmPassword.errors?.["passwordCheck"]}}</small>
+        }
+      }
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button [disabled]="!registrationForm.valid" (click)="addUser()" type="submit" class="btn btn-primary">
+      Submit
+    </button>
   </form>
-
 </div>

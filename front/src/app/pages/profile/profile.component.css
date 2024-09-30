@@ -1,0 +1,98 @@
+.header {
+  border: 1px solid black;
+  height: 12%;
+}
+
+.logo {
+  width: 11%;
+  height: 100%;
+}
+
+.header-content {
+  margin-right: 3rem;
+}
+
+.header-content div {
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 1rem;
+}
+
+.search {
+  width: 40%;
+   height: 40%;
+  margin-left: 1rem;
+}
+.input-header {
+  border: .5px solid gray;
+}
+
+.search-icon {
+  font-size: 1.1rem;
+  position: absolute;
+  top: 23px;
+  right: 24px;
+  cursor: pointer;
+  background-color: white;
+
+}
+
+.menu {
+  width: 15%;
+  border: 1px solid black;
+  padding: 1rem;
+  background-color: #24231f;
+  color: #d6b531;
+}
+
+.menu-header {
+  font-weight: 700;
+  font-size: 1.425rem;
+  margin: 0 0 3rem;
+}
+
+.menu-category {
+  color: white;
+  font-size: 1.325rem;
+}
+
+.menu-category div {
+  padding: .8rem;
+}
+.menu-about {
+  padding: 1rem;
+  padding-left: 0;
+  font-size: 1.425rem;
+  font-weight: 700;
+}
+
+.content {
+  width: 85%;
+}
+
+
+
+.main {
+  border: 1px solid black;
+  height: 75%;
+  overflow: hidden;
+  overflow-y: scroll;
+  background-color: #e0d194;
+
+}
+.footer {
+  border: 1px solid black;
+  height: 13%;
+}
+
+.grid-template {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+
+.main-container {
+  padding: 1rem;
+}
+
