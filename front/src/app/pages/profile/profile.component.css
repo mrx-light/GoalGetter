@@ -1,49 +1,7 @@
-.header {
-  border: 1px solid black;
-  height: 12%;
-}
 
-.logo {
-  width: 11%;
-  height: 100%;
-}
 
-.header-content {
-  margin-right: 3rem;
-}
 
-.header-content div {
-  font-weight: 700;
-  font-size: 1.3rem;
-  padding: 1rem;
-}
 
-.search {
-  width: 40%;
-   height: 40%;
-  margin-left: 1rem;
-}
-.input-header {
-  border: .5px solid gray;
-}
-
-.search-icon {
-  font-size: 1.1rem;
-  position: absolute;
-  top: 23px;
-  right: 24px;
-  cursor: pointer;
-  background-color: white;
-
-}
-
-.menu {
-  width: 15%;
-  border: 1px solid black;
-  padding: 1rem;
-  background-color: #24231f;
-  color: #d6b531;
-}
 
 .menu-header {
   font-weight: 700;
@@ -57,7 +15,7 @@
 }
 
 .menu-category div {
-  padding: .8rem;
+  padding: 0.8rem;
 }
 .menu-about {
   padding: 1rem;
@@ -66,23 +24,22 @@
   font-weight: 700;
 }
 
-.content {
-  width: 85%;
-}
+
 
 
 
 .main {
-  border: 1px solid black;
-  height: 75%;
+  height: 88%;
   overflow: hidden;
   overflow-y: scroll;
   background-color: #e0d194;
-
 }
 .footer {
-  border: 1px solid black;
-  height: 13%;
+  background-color: #3a3d42;
+  padding: 1rem;
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
 }
 
 .grid-template {
@@ -91,8 +48,32 @@
   height: 100%;
 }
 
-
 .main-container {
   padding: 1rem;
 }
 
+.category-name {
+  font-size: 1.425rem;
+  font-weight: 700;
+}
+
+.category-see-more {
+  font-size: 1.2rem;
+  color: blue;
+  font-weight: 600;
+  border-bottom: 2px solid blue;
+  cursor: pointer;
+}
+
+.container-cards {
+  border-bottom: 1px #24231f solid;
+  border-top: 1px #24231f solid;
+  padding: 2rem 0;
+  margin: 2rem 0;
+}
+
+.error-info {
+  color: red;
+  font-size: 1rem;
+  font-weight: 600;
+}

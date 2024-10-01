@@ -8,8 +8,26 @@ body {
   color: red;
 }
 
+.content {
+  width: 85%;
+}
+
+.menu {
+  width: 15%;
+  padding: 1rem;
+  background-color: #24231f;
+  color: #d6b531;
+}
+
+.header {
+  height: 12%;
+}
 
 .reg-form {
   width: 40%;
   margin: 5rem;
+}
+
+.card-text-profile {
+  margin: 0 0 .5rem ;
 }

@@ -1,67 +1,97 @@
 <div class="d-flex grid-template">
-  <div class="menu w-20 d-flex flex-column justify-content-between">
-    <div>
-      <div class="menu-header">
-        Category
-      </div>
-      <div class="menu-category">
-        <div>Leagues</div>
-        <div>Teams</div>
-        <div>Couches</div>
-        <div>Players</div>
-        <div>Venues</div>
-      </div>
-    </div>
-    <div class="menu-about ">About</div>
+  <div class="menu ">
+    <app-menu [menuName]="'Category'"></app-menu>
   </div>
 
-    <div class="content">
-      <div class="header d-flex justify-content-between align-items-center">
-        <img src="assets/img/banner.png" alt="lll" class="logo">
-        <div class="d-flex header-content align-items-center">
-          <div>Profile: {{'Name'}} </div>
-          <div>LogOut</div>
-          <div class="position-relative search">
-            <input type="text" class="form-control input-header " placeholder="Search">
-            <i class="bi bi-search search-icon"></i>
-          </div>
+  <div class="content">
+    <div class="header">
+      <app-header></app-header>
+    </div>
+    <div class="main ">
+    <div class="main-container">
+      <div>
+        <div class="d-flex justify-content-between">
+          <div class="category-name">Leagues</div>
+          <div class="category-see-more">See more</div>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center container-cards"
+        >
+          @if (!this.limitedLeagues.length) {
+            <p class="error-info">There are no leagues</p>
+          }
+          @for (item of limitedLeagues; track $index) {
+            <app-leagues-card [league]="item"></app-leagues-card>
+          }
         </div>
       </div>
-
-      <div class="main main-container">
-
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template grid-template grid-template
-        grid-template grid-template grid-template
+      <div>
+        <div class="d-flex justify-content-between">
+          <div class="category-name">Teams</div>
+          <div class="category-see-more">See more</div>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center container-cards"
+        >
+          @if (!this.limitedTeams.length) {
+            <p class="error-info">There are no teams</p>
+          }
+          @for (item of limitedTeams; track $index) {
+            <app-team-card [teams]="item"></app-team-card>
+          }
+        </div>
+      </div>
+      <div>
+        <div class="d-flex justify-content-between">
+          <div class="category-name">Couches</div>
+          <div class="category-see-more">See more</div>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center container-cards"
+        >
+          @if (!this.limitedCoach.length) {
+            <p class="error-info">There are no Coaches</p>
+          }
+          @for (item of limitedCoach; track $index) {
+            <app-coach-card [coach]="item"></app-coach-card>
+          }
+        </div>
+      </div>
+      <div>
+        <div class="d-flex justify-content-between">
+          <div class="category-name">Players</div>
+          <div class="category-see-more">See more</div>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center container-cards"
+        >
+          @if (!this.limitedPlayers.length) {
+            <p class="error-info">There are no players</p>
+          }
+          @for (item of limitedPlayers; track $index) {
+            <app-player-card [player]="item"></app-player-card>
+          }
+        </div>
+      </div>
+      <div>
+        <div class="d-flex justify-content-between">
+          <div class="category-name">Venues</div>
+          <div class="category-see-more">See more</div>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center container-cards"
+        >
+          @if (!this.limitedVenues.length) {
+            <p class="error-info">There are no venues</p>
+          }
+          @for (item of limitedVenues; track $index) {
+            <app-venue-card [venue]="item"></app-venue-card>
+          }
+        </div>
+      </div>
       </div>
       <div class="footer">HEheasdasd</div>
+
     </div>
+  </div>
 </div>
