@@ -31,3 +31,18 @@ body {
 .card-text-profile {
   margin: 0 0 .5rem ;
 }
+
+.main {
+  height: 88%;
+  overflow: hidden;
+  overflow-y: scroll;
+  background-color: #e0d194;
+}
+
+
+td, th {
+  padding: 1rem 1rem;
+}
+.cursor-p {
+  cursor: pointer;
+}

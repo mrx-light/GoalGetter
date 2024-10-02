@@ -28,12 +28,7 @@
 
 
 
-.main {
-  height: 88%;
-  overflow: hidden;
-  overflow-y: scroll;
-  background-color: #e0d194;
-}
+
 .footer {
   background-color: #3a3d42;
   padding: 1rem;

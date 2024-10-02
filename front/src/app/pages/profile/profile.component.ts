@@ -40,83 +40,83 @@ export class ProfileComponent implements OnInit, OnDestroy {
   limitedVenues = [];
   ngOnInit() {
     // const getUser = this.passData.getUser.source._value;
-    this.profileServices
-      .getLeagues()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: any) => {
-          this.passData.setLeagues(res.response);
-          const getLeagues = this.passData.getLeagues.source._value;
-          this.limitedLeagues = getLeagues.slice(0, 5);
-        },
-        error: (err) => {
-          this.errorServices.errorHandleProfile(err);
-        },
-      });
-    this.profileServices
-      .getTeams()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: any) => {
-          this.passData.setTeams(res.response);
-          const getTeams = this.passData.getTeams.source._value;
-          this.limitedTeams = getTeams.slice(0, 5);
-        },
-        error: (err) => {
-          this.errorServices.errorHandleProfile(err);
-        },
-      });
-    this.profileServices
-      .getCouches()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: any) => {
-          this.passData.setCoach(res.response);
-          const getCoach = this.passData.getCoachs.source._value;
-          if (getCoach.length > 5) {
-            this.limitedCoach = getCoach.slice(0, 5);
-            return;
-          }
-          this.limitedCoach = getCoach;
-        },
-        error: (err) => {
-          this.errorServices.errorHandleProfile(err);
-        },
-      });
-    this.profileServices
-      .getPlayers()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: any) => {
-          this.passData.setPlayers(res.response);
-          const getPlayers = this.passData.getPlayers.source._value;
-          if (getPlayers.length > 5) {
-            this.limitedPlayers = getPlayers.slice(0, 5);
-            return;
-          }
-          this.limitedPlayers = getPlayers;
-        },
-        error: (err) => {
-          this.errorServices.errorHandleProfile(err);
-        },
-      });
-    this.profileServices
-      .getVenues()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: any) => {
-          this.passData.setVenues(res.response);
-          const getVenues = this.passData.getVenues.source._value;
-          if (getVenues.length > 5) {
-            this.limitedVenues = getVenues.slice(0, 5);
-            return;
-          }
-          this.limitedVenues = getVenues;
-        },
-        error: (err) => {
-          this.errorServices.errorHandleProfile(err);
-        },
-      });
+    // this.profileServices
+    //   .getLeagues()
+    //   .pipe(takeUntil(this.ngUnsubscribe))
+    //   .subscribe({
+    //     next: (res: any) => {
+    //       this.passData.setLeagues(res.response);
+    //       const getLeagues = this.passData.getLeagues.source._value;
+    //       this.limitedLeagues = getLeagues.slice(0, 5);
+    //     },
+    //     error: (err) => {
+    //       this.errorServices.errorHandleProfile(err);
+    //     },
+    //   });
+    // this.profileServices
+    //   .getTeams()
+    //   .pipe(takeUntil(this.ngUnsubscribe))
+    //   .subscribe({
+    //     next: (res: any) => {
+    //       this.passData.setTeams(res.response);
+    //       const getTeams = this.passData.getTeams.source._value;
+    //       this.limitedTeams = getTeams.slice(0, 5);
+    //     },
+    //     error: (err) => {
+    //       this.errorServices.errorHandleProfile(err);
+    //     },
+    //   });
+    // this.profileServices
+    //   .getCouches()
+    //   .pipe(takeUntil(this.ngUnsubscribe))
+    //   .subscribe({
+    //     next: (res: any) => {
+    //       this.passData.setCoach(res.response);
+    //       const getCoach = this.passData.getCoachs.source._value;
+    //       if (getCoach.length > 5) {
+    //         this.limitedCoach = getCoach.slice(0, 5);
+    //         return;
+    //       }
+    //       this.limitedCoach = getCoach;
+    //     },
+    //     error: (err) => {
+    //       this.errorServices.errorHandleProfile(err);
+    //     },
+    //   });
+    // this.profileServices
+    //   .getPlayers()
+    //   .pipe(takeUntil(this.ngUnsubscribe))
+    //   .subscribe({
+    //     next: (res: any) => {
+    //       this.passData.setPlayers(res.response);
+    //       const getPlayers = this.passData.getPlayers.source._value;
+    //       if (getPlayers.length > 5) {
+    //         this.limitedPlayers = getPlayers.slice(0, 5);
+    //         return;
+    //       }
+    //       this.limitedPlayers = getPlayers;
+    //     },
+    //     error: (err) => {
+    //       this.errorServices.errorHandleProfile(err);
+    //     },
+    //   });
+    // this.profileServices
+    //   .getVenues()
+    //   .pipe(takeUntil(this.ngUnsubscribe))
+    //   .subscribe({
+    //     next: (res: any) => {
+    //       this.passData.setVenues(res.response);
+    //       const getVenues = this.passData.getVenues.source._value;
+    //       if (getVenues.length > 5) {
+    //         this.limitedVenues = getVenues.slice(0, 5);
+    //         return;
+    //       }
+    //       this.limitedVenues = getVenues;
+    //     },
+    //     error: (err) => {
+    //       this.errorServices.errorHandleProfile(err);
+    //     },
+    //   });
   }
 
   ngOnDestroy(): void {

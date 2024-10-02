@@ -21,7 +21,22 @@ export interface LeaguesInterface {
     type: string;
   };
   seasons: {
-    coverage: any;
+    coverage: {
+      fixtures: {
+        events: boolean;
+        lineups: boolean;
+        statistics_fixtures: boolean;
+        statistics_players: boolean;
+      };
+      injuries: boolean;
+      odds: boolean;
+      players: boolean;
+      predictions: boolean;
+      standings: boolean;
+      top_assists: boolean;
+      top_cards: boolean;
+      top_scorers: boolean;
+    };
     current: boolean | null;
     end: string | null;
     start: string | null;
