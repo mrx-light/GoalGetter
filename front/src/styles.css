@@ -8,6 +8,10 @@ body {
   color: red;
 }
 
+.odd-backg {
+  background-color: #e4e6ef;
+}
+
 .content {
   width: 85%;
 }
@@ -48,6 +52,31 @@ td, th {
 }
 .cursor-p {
   cursor: pointer;
+}
+
+
+.box {
+  background-color: papayawhip;
+  margin: 1rem;
+  border: 2px solid white;
+  border-radius: 5px;
+  overflow: hidden;
+  overflow-y: scroll;
+  width: 13rem;
+  height: 30rem;
+}
+
+.info-box {
+  background-color: white;
+  margin: 1rem;
+  padding: 0;
+  border-radius: 7px;
+}
+
+.tab-players {
+  border-radius: 7px 7px 0 0;
+  background-color: #e4e6ef;
+  padding: 1rem;
 }
 
 

@@ -87,7 +87,7 @@
                   | paginate: { itemsPerPage: 20, currentPage: page };
                 track $index
               ) {
-                <tr>
+                <tr [class]=" $index%2 ? 'odd-backg' : ''">
                   <img [src]="item?.player?.photo" [alt]="item?.player?.name" />
                   <td>{{ item?.player?.id }}</td>
                   <td>{{ item?.player?.name }}</td>

@@ -5,6 +5,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { LeaguesComponent } from './pages/leagues/leagues.component';
 import { PlayersComponent } from './pages/players/players.component';
 import { PlayerComponent } from './pages/player/player.component';
+import { TeamsComponent } from './pages/teams/teams.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -12,6 +13,7 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'leagues', component: LeaguesComponent },
   { path: 'players', component: PlayersComponent },
+  { path: 'teams', component: TeamsComponent },
   { path: 'player/:id/:season', component: PlayerComponent },
   { path: '', redirectTo: '/profile', pathMatch: 'full' },
   { path: '**', redirectTo: '/profile' },
