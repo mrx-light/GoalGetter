@@ -1,1 +1,121 @@
-<p>players works!</p>
+<!--    <div class="menu ">-->
+<!--      <app-menu [menuName]="'Players'"></app-menu>-->
+<!--    </div>-->
+<div class="main-players">
+  <div class="">
+    <div class="header"><app-header></app-header></div>
+    <div class="">
+      <div class="d-flex">
+        <div class="box">
+          <h5>Country's</h5>
+          @if(countryErrorMessage) {
+            <p class="text-danger">{{countryErrorMessage}}</p>
+          }
+          @if(!countryArr) {
+            <p class="text-danger">There are no Country</p>
+          }
+          <ol>
+            @for (item of countryArr; track $index) {
+              <li (click)="setCountry(item.name)">
+                {{ item.name }}
+                <img class="cursor-p" [src]="item.flag" alt="flag" [class]="'country-img'" />
+              </li>
+            }
+          </ol>
+        </div>
+        <div class="box">
+          <h5>Seasons</h5>
+          @if(seasonErrorMessage) {
+            <p class="text-danger">{{seasonErrorMessage}}</p>
+          }
+          @if(!seasonsArr) {
+            <p class="text-danger">There are no seasons</p>
+          }
+          <ol>
+            @for (item of seasonsArr; track $index) {
+              <li class="cursor-p" (click)="setYear(item)">{{ item }}</li>
+            }
+          </ol>
+        </div>
+        <div class="box">
+          <h5>Teams</h5>
+          @if(teamErrorMessage) {
+            <p class="text-danger">{{teamErrorMessage}}</p>
+          }
+          @if(!teamsArr) {
+            <p class="text-danger">Select a country First</p>
+          }
+          <ol>
+            @for (item of teamsArr; track $index) {
+              <li (click)="setTeam(item.team.id)">
+                {{ item.team.name }}
+                <img class="cursor-p" [src]="item.team.logo" alt="flag" [class]="'country-img'" />
+                {{item.team.id}}
+              </li>
+            }
+          </ol>
+        </div>
+      </div>
+      <div class="info-box">
+        <div class="d-flex justify-content-between align-items-center tab-players">
+          <h5 class="">Players</h5>
+          <div class="d-flex align-items-center">
+            <h6 class="p-3">{{countryName}}</h6>/
+            <h6 class="p-3">{{year}}</h6>/
+            <h6 class="p-3">{{team}}</h6>
+          </div>
+        </div>
+        <table class="w-100">
+          <thead class="header-tabs">
+            <tr class="">
+              <th>Photo</th>
+              <th (click)="sortPlayers('id')">Id</th>
+              <th (click)="sortPlayers('name')">Name</th>
+              <th (click)="sortPlayers('age')">Age</th>
+              <th (click)="sortPlayers('weight')">Weight</th>
+              <th (click)="sortPlayers('height')">Height</th>
+              <th (click)="sortPlayers('goals')">Goals</th>
+              <th (click)="sortPlayers('duels')">Duels</th>
+              <th (click)="sortPlayers('yellow-card')">Yellow-Card</th>
+              <th (click)="sortPlayers('red-card')">Red-Card</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (playersArr.length) {
+              @for (
+                item of playersArr
+                  | paginate: { itemsPerPage: 20, currentPage: page };
+                track $index
+              ) {
+                <tr>
+                  <img [src]="item?.player?.photo" [alt]="item?.player?.name" />
+                  <td>{{ item?.player?.id }}</td>
+                  <td>{{ item?.player?.name }}</td>
+                  <td>{{ item?.player?.age }}</td>
+                  <td>{{ item?.player?.weight }}</td>
+                  <td>{{ item?.player?.height }}</td>
+                  <td>{{ item?.statistics?.[0]?.goals?.total }}</td>
+                  <td>{{ item?.statistics?.[0]?.duel?.total }}</td>
+                  <td>{{ item?.statistics?.[0]?.cards?.yellow }}</td>
+                  <td>{{ item?.statistics?.[0]?.cards?.red }}</td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+        @if (!playersArr.length) {
+          <h4 class="link-danger text-center m-3">
+            There are not such players
+          </h4>
+        }
+        @if(playerErrorMessage) {
+          <h4 class="text-danger">{{playerErrorMessage}}</h4>
+        }
+        <div class="p-3">
+          <pagination-controls (pageChange)="page = $event"></pagination-controls>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

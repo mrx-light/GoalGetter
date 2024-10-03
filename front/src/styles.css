@@ -17,10 +17,12 @@ body {
   padding: 1rem;
   background-color: #24231f;
   color: #d6b531;
+  height: 100%;
 }
 
 .header {
   height: 12%;
+  background-color: white;
 }
 
 .reg-form {
@@ -42,6 +44,7 @@ body {
 
 td, th {
   padding: 1rem 1rem;
+  cursor: pointer;
 }
 .cursor-p {
   cursor: pointer;

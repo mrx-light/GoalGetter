@@ -1,0 +1,48 @@
+.box {
+  padding: .5rem;
+  background-color: papayawhip;
+  margin: 1rem;
+  border: 2px solid white;
+  border-radius: 5px;
+  overflow: hidden;
+  overflow-y: scroll;
+  width: 13rem;
+  height: 30rem;
+}
+
+
+.main-players {
+  background-color: #e0d194;
+  padding-bottom: 1rem;
+}
+
+
+.info-box {
+  background-color: white;
+  margin: 1rem;
+  padding: 0;
+
+  border-radius: 7px;
+
+}
+
+.tab-players {
+  border-radius: 7px 7px 0 0;
+  background-color: #e4e6ef;
+  padding: 1rem;
+  ;
+
+}
+
+
+.header-tabs {
+  font-weight: 500;
+}
+.color-col {
+  background-color: #e4e6ef;
+}
+
+.country-img {
+  width: 1rem;
+  height: .7rem;
+}

@@ -201,3 +201,9 @@ export interface VenuesInterface {
   name: string;
   surface: string | null;
 }
+
+export interface CountryInterface {
+  name: string;
+  flag: string;
+  code: string;
+}
