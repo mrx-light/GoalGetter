@@ -79,7 +79,7 @@ export interface CoachesInterface {
       id: number;
       logo: string;
       name: string;
-    }[];
+    };
   }[];
   firstname: string;
   height: string | number | null;

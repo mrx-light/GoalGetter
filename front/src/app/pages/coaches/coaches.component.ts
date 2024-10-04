@@ -10,11 +10,11 @@ import { Subject, takeUntil } from 'rxjs';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
-  selector: 'app-coachs',
+  selector: 'app-coaches',
   standalone: true,
   imports: [HeaderComponent, NgxPaginationModule],
   templateUrl: './coaches.component.html',
-  styleUrl: './coaches.component.css',
+  styleUrls: ['./coaches.component.css'],
 })
 export class CoachesComponent implements OnInit, OnDestroy {
   playersServices = inject(PlayersService);
@@ -26,7 +26,6 @@ export class CoachesComponent implements OnInit, OnDestroy {
   countryName: undefined | string = undefined;
   page: any;
   ngUnsubscribe = new Subject<void>();
-
   countryErrorMessage: string | undefined = undefined;
   teamErrorMessage: string | undefined = undefined;
   couchErrorMessage: string | undefined = undefined;
