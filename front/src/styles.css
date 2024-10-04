@@ -84,3 +84,8 @@ td, th {
   background-color: #e0d194;
   padding-bottom: 1rem;
 }
+
+.country-img {
+  width: 1rem;
+  height: 0.7rem;
+}
