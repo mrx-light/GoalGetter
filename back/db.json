@@ -4,46 +4,81 @@
       "id": "mrx_light",
       "name": "Malanici",
       "surname": "Petru",
-      "email": "koala@gmail.com",
+      "email": "pmalanici@gmail.com",
       "password": "123123",
-      "confirmPassword": "123123",
       "isActive": true
     },
     {
       "id": "iulia_2321",
-      "name": "Iulia",
-      "surname": "Zarzar",
-      "email": "iulea@gmail.com",
+      "name": "Malanici",
+      "surname": "Petru",
+      "email": "koala@gmail.com",
       "password": "123123",
-      "confirmPassword": "123123"
+      "isActive": true
     },
     {
       "id": "lara_111",
       "name": "Laura",
       "surname": "Care",
       "email": "lara@gmail.com",
-      "password": "1234123"
+      "password": "1234123",
+      "isActive": true
     },
     {
       "id": "tare_123",
       "name": "Tare",
       "surname": "Ions",
       "email": "tare@gmail.com",
-      "password": "1234123"
+      "password": "1234123",
+      "isActive": true
     },
     {
       "id": "Hohoho",
       "name": "Hehe",
       "surname": "Hohoho",
       "email": "Hohoho@gmail.com",
-      "password": "asas"
+      "password": "asas",
+      "isActive": true
     }
   ],
-  "login": [
+  "saved": [
     {
-      "id": "5555",
-      "email": "pmalanici@gmail.com",
-      "password": "123"
+      "id": "Hohoho",
+      "leagues": [
+        "32"
+      ],
+      "teams": [],
+      "players": [],
+      "couches": [],
+      "venues": []
+    },
+    {
+      "id": "123",
+      "leagues": [
+        "32"
+      ],
+      "teams": [],
+      "players": [],
+      "couches": [],
+      "venues": []
+    },
+    {
+      "id": "1",
+      "leagues": [
+        "32"
+      ],
+      "teams": [],
+      "players": [],
+      "couches": [],
+      "venues": []
+    },
+    {
+      "id": "mrx_light",
+      "leagues": [],
+      "teams": [],
+      "players": [],
+      "coaches": [],
+      "venues": []
     }
   ]
 }

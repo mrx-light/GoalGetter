@@ -21,6 +21,7 @@ import { TeamModalComponent } from '../../layouts/team-modal/team-modal.componen
 })
 export class TeamsComponent implements OnInit, OnDestroy {
   playerServices = inject(PlayersService);
+
   teamsArr: TeamsInterface[] | [] = [];
   countryArray: CountryInterface[] | [] = [];
   countryName: string | null = null;
@@ -78,23 +79,23 @@ export class TeamsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.errorCountryMessage = null;
-    // this.playerServices
-    //   .getCountry()
-    //   .pipe(takeUntil(this.ngUnsubscribe))
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       console.log(res);
-    //       if (res.errors && res.errors.plan) {
-    //         this.errorCountryMessage = res.errors.plan;
-    //         console.log(res.errors.plan);
-    //         return;
-    //       }
-    //       this.countryArray = res.response;
-    //     },
-    //     error: (err: any) => {
-    //       console.log(err);
-    //     },
-    //   });
+    this.playerServices
+      .getCountry()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: any) => {
+          console.log(res);
+          if (res.errors && res.errors.plan) {
+            this.errorCountryMessage = res.errors.plan;
+            console.log(res.errors.plan);
+            return;
+          }
+          this.countryArray = res.response;
+        },
+        error: (err: any) => {
+          console.log(err);
+        },
+      });
   }
   ngOnDestroy(): void {}
 }

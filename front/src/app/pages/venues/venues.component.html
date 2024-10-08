@@ -1,1 +1,85 @@
-<p>venues works!</p>
+<div class="content w-100">
+  <div class="header">
+    <app-header></app-header>
+  </div>
+  <div class="main-players">
+    <div class="d-flex">
+      <div class="box">
+        <h5 class="p-2">Country</h5>
+        <ol class="p-2">
+          @if (countryArr.length) {
+            @for (item of countryArr; track $index) {
+              <li
+                [class]="$index % 2 ? 'odd-backg ' : '' + 'cursor-p p-3'"
+                (click)="getVenues(item.name)"
+              >
+                {{ item.name }}
+              </li>
+            }
+          } @else {
+            <h6 class="text-danger">
+              There is something wrong {{ errorCountryMessage }}
+            </h6>
+          }
+        </ol>
+      </div>
+      <div class="w-100 info-box d-flex align-items-end flex-column mb-3">
+        <div class="w-100 d-flex justify-content-between tab-players">
+          <h4>Venues</h4>
+          <h5 class="">{{ countryName ?? "Unselected " }}</h5>
+        </div>
+
+        <table class="w-100">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th (click)="sortBy('id')">Id</th>
+              <th (click)="sortBy('name')">Name</th>
+              <th (click)="sortBy('country')">Country</th>
+              <th (click)="sortBy('code')">Capacity</th>
+              <th (click)="sortBy('founded')">Address</th>
+              <th (click)="sortBy('surface')">Surface</th>
+              <th (click)="sortBy('venue-city')">City</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (venuesArr.length) {
+              @for (
+                item of venuesArr
+                  | paginate: { itemsPerPage: 20, currentPage: page };
+                track $index
+              ) {
+                <tr
+                  [attr.data-bs-target]="'#modal'"
+                  data-bs-toggle="modal"
+                  (click)="passDataModal(item)"
+                  [class]="$index % 2 ? 'odd-backg ' : ' ' + 'cursor-p'"
+                >
+                  <td><img [src]="item.image" alt="logo" class="logo" /></td>
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.country }}</td>
+                  <td>{{ item.capacity }}</td>
+                  <td>{{ item.address }}</td>
+                  <td>{{ item.surface }}</td>
+                  <td>{{ item.city }}</td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+        @if (!venuesArr.length && !errorVenuesMessage) {
+          <h4 class="text-danger text-center p-3">
+            Something Went Wrong {{ errorVenuesMessage }}
+          </h4>
+        }
+        <div class="p-3 mt-auto">
+          <pagination-controls
+            (pageChange)="page = $event"
+          ></pagination-controls>
+        </div>
+        <app-venue-modal [venue]="venue"></app-venue-modal>
+      </div>
+    </div>
+  </div>
+</div>

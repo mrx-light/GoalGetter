@@ -125,7 +125,7 @@ export interface PlayerInterface {
       success: null | number | string;
       past: null | number | string;
     };
-    duel: {
+    duels: {
       total: null | number | string;
       success: null | number | string;
       past: null | number | string;
@@ -206,4 +206,31 @@ export interface CountryInterface {
   name: string;
   flag: string;
   code: string;
+}
+
+export interface SavesInterface {
+  id: string;
+  leagues: string[];
+  teams: string[];
+  players: {
+    id: string;
+    season: string;
+  }[];
+  coaches: string[];
+  venues: string[];
+}
+
+export interface ResponseInterface {
+  get: string;
+  parameters: {
+    id: string;
+    season: 2019;
+  };
+  errors: any[];
+  results: number;
+  paging: {
+    current: number | null;
+    total: number | null;
+  };
+  response: any;
 }

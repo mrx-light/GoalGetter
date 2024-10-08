@@ -38,6 +38,12 @@ body {
   margin: 0 0 .5rem ;
 }
 
+.modal-logo {
+  width: 15rem;
+  height: 10rem;
+}
+
+
 .main {
   height: 88%;
   overflow: hidden;
