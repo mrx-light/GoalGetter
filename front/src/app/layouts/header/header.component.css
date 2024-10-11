@@ -1,0 +1,32 @@
+.logo {
+  width: auto;
+  height: 100%;
+}
+
+.header-content {
+  margin-right: 3rem;
+}
+
+.header-content div {
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 1rem;
+}
+
+.search {
+  width: 40%;
+  height: 40%;
+  margin-left: 1rem;
+}
+.input-header {
+  border: 0.5px solid gray;
+}
+
+.search-icon {
+  font-size: 1.1rem;
+  position: absolute;
+  top: 23px;
+  right: 24px;
+  cursor: pointer;
+  background-color: white;
+}

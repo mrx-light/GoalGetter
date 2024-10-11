@@ -6,39 +6,110 @@ import { Subject, takeUntil } from 'rxjs';
 import {
   CountryInterface,
   PlayerInterface,
+  ResponseInterface,
   TeamsInterface,
+  UserInterface,
 } from '../../models/interface';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { UserService } from '../../services/user.service';
+import { Router, RouterLink } from '@angular/router';
+import { SaveButtonComponent } from '../../layouts/save-button/save-button.component';
+import { TeamsService } from '../../services/teams.service';
 
 @Component({
   selector: 'app-players',
   standalone: true,
-  imports: [HeaderComponent, MenuComponent, NgxPaginationModule],
+  imports: [
+    HeaderComponent,
+    MenuComponent,
+    NgxPaginationModule,
+    SaveButtonComponent,
+    RouterLink,
+  ],
   templateUrl: './players.component.html',
   styleUrl: './players.component.css',
 })
 export class PlayersComponent implements OnInit, OnDestroy {
   playersServices = inject(PlayersService);
-  ngUnsubscribe = new Subject<void>();
-  countryArr: CountryInterface[] | undefined = undefined;
+  loginServices = inject(UserService);
+  navigate = inject(Router);
+  teamsServices = inject(TeamsService);
+
+  countryArr: CountryInterface[] = [];
+  playersArr: PlayerInterface[] = [];
+  teamsArr: TeamsInterface[] = [];
+  userData: UserInterface | null = null;
   seasonsArr: number[] | undefined = undefined;
-  teamsArr: TeamsInterface[] | undefined = undefined;
+
   countryName: undefined | string = undefined;
   year: undefined | string = undefined;
   team: string | number | undefined = undefined;
-  playersArr: PlayerInterface[] | [] = [];
   playerErrorMessage: string | undefined = undefined;
   countryErrorMessage: string | undefined = undefined;
   seasonErrorMessage: string | undefined = undefined;
   teamErrorMessage: string | undefined = undefined;
 
+  page: any;
+  destroyRef = new Subject<void>();
+
+  ngOnInit(): void {
+    this.loginServices.getLoggedUser
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (el: UserInterface | null) => {
+          if (el) {
+            this.userData = el;
+            this.playersServices
+              .getCountry()
+              .pipe(takeUntil(this.destroyRef))
+              .subscribe({
+                next: (res: ResponseInterface) => {
+                  if (res.errors.plan) {
+                    this.countryErrorMessage = res.errors.plan;
+                    console.log(res.errors.plan);
+                    return;
+                  }
+                  this.countryArr = res.response;
+                },
+                error: (err) => {
+                  console.error(err);
+                },
+              });
+            this.playersServices
+              .getSeasons()
+              .pipe(takeUntil(this.destroyRef))
+              .subscribe({
+                next: (res: ResponseInterface) => {
+                  if (res.errors.plan) {
+                    this.seasonErrorMessage = res.errors.plan;
+                    console.log(res.errors.plan);
+                    return;
+                  }
+                  this.seasonsArr = res.response;
+                },
+                error: (err) => {
+                  console.error(err);
+                },
+              });
+            return;
+          }
+          this.navigate.navigateByUrl('/login');
+        },
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyRef.next();
+    this.destroyRef.complete();
+  }
+
   setCountry(country: string) {
     this.countryName = country;
-    this.playersServices
+    this.teamsServices
       .getTeams(country)
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntil(this.destroyRef))
       .subscribe({
-        next: (res: any) => {
+        next: (res: ResponseInterface) => {
           if (res.errors.plan) {
             this.teamErrorMessage = res.errors.plan;
             console.log(res.errors.plan);
@@ -51,7 +122,6 @@ export class PlayersComponent implements OnInit, OnDestroy {
         },
       });
   }
-  page: any;
 
   setTeam(team: string | number) {
     this.team = team;
@@ -62,7 +132,19 @@ export class PlayersComponent implements OnInit, OnDestroy {
     this.year = year + '';
     this.getPlayers();
   }
-  sortPlayers(key: any) {
+
+  sortPlayers(
+    key:
+      | 'id'
+      | 'name'
+      | 'weight'
+      | 'height'
+      | 'age'
+      | 'yellow-card'
+      | 'red-card'
+      | 'duels'
+      | 'goals',
+  ) {
     if (this.playersArr.length) {
       this.playersArr = this.playersServices.sortPlayersBy(
         this.playersArr,
@@ -70,14 +152,15 @@ export class PlayersComponent implements OnInit, OnDestroy {
       );
     }
   }
+
   getPlayers() {
     this.playerErrorMessage = undefined;
     if (this.year && this.team) {
       this.playersServices
         .getPlayers(this.team, this.year)
-        .pipe(takeUntil(this.ngUnsubscribe))
+        .pipe(takeUntil(this.destroyRef))
         .subscribe({
-          next: (res: any) => {
+          next: (res: ResponseInterface) => {
             if (res.errors.plan) {
               this.playerErrorMessage = res.errors.plan;
               console.log(res.errors.plan);
@@ -85,50 +168,10 @@ export class PlayersComponent implements OnInit, OnDestroy {
             }
             this.playersArr = res.response;
           },
-          error: (err: any) => {
+          error: (err) => {
             console.error('Something went wrong', err);
           },
         });
     }
-  }
-
-  ngOnInit(): void {
-    this.playersServices
-      .getCountry()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: any) => {
-          if (res.errors.plan) {
-            this.countryErrorMessage = res.errors.plan;
-            console.log(res.errors.plan);
-            return;
-          }
-          this.countryArr = res.response;
-        },
-        error: (err) => {
-          console.error(err);
-        },
-      });
-    this.playersServices
-      .getSeasons()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: any) => {
-          if (res.errors.plan) {
-            this.seasonErrorMessage = res.errors.plan;
-            console.log(res.errors.plan);
-            return;
-          }
-          this.seasonsArr = res.response;
-        },
-        error: (err) => {
-          console.error(err);
-        },
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 }

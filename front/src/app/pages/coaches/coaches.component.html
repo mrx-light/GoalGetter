@@ -1,8 +1,6 @@
-<div class="content w-100">
-  <div class="main-players">
-    <div class="header">
-      <app-header></app-header>
-    </div>
+<app-header [userId]="userData?.id"></app-header>
+<div class="main-players">
+  <div class="d-flex w-100 justify-content-center flex-column">
     <div class="d-flex">
       <div>
         <div class="box">
@@ -57,9 +55,9 @@
         >
           <h4>Coaches</h4>
           <div class="d-flex align-items-center">
-            <h5 class="">{{ countryName?? "Unselected "}}</h5>
+            <h5 class="">{{ countryName ?? "Unselected " }}</h5>
             <h5 class="p-3">/</h5>
-            <h5 class="">{{ teamName?? "Unselected "}}</h5>
+            <h5 class="">{{ teamName ?? "Unselected " }}</h5>
           </div>
         </div>
         <table class="w-100">
@@ -80,18 +78,25 @@
                   | paginate: { itemsPerPage: 20, currentPage: page };
                 track $index
               ) {
-                <tr [class]="$index % 2 ? 'odd-backg' : ''">
+                <tr [class]="$index % 2 ? 'odd-backg' : ''" [routerLink]="'/coach/' +[item?.id]">
                   <td><img [src]="item?.photo" alt="photo" /></td>
                   <td>{{ item?.id }}</td>
                   <td>{{ item?.name }}</td>
                   <td>{{ item?.age }}</td>
                   <td>{{ item?.team?.name }}</td>
                   <td>{{ item?.birth?.date }}</td>
+                  <app-save-button
+                    [idCategory]="item.id + ''"
+                    [category]="'coaches'"
+                    [userName]="userData?.id"
+                  ></app-save-button>
                 </tr>
               }
             }
           </tbody>
-          <pagination-controls (pageChange)="page = $event"></pagination-controls>
+          <pagination-controls
+            (pageChange)="page = $event"
+          ></pagination-controls>
         </table>
       </div>
     </div>

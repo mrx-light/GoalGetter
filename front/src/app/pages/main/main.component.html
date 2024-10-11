@@ -1,18 +1,10 @@
-<div class="d-flex grid-template">
-  <div class="menu ">
-    <app-menu [menuName]="'Category'"></app-menu>
-  </div>
-
-  <div class="content">
-    <div class="header">
-      <app-header></app-header>
-    </div>
-    <div class="main ">
-    <div class="main-container">
+<app-header [userId]="userData?.id"></app-header>
+    <div class=" main">
+    <div class="main-container container">
       <div>
         <div class="d-flex justify-content-between">
           <div class="category-name">Leagues</div>
-          <div class="category-see-more">See more</div>
+          <div class="category-see-more" routerLink="/leagues">See more</div>
         </div>
         <div
           class="d-flex justify-content-between align-items-center container-cards"
@@ -28,7 +20,7 @@
       <div>
         <div class="d-flex justify-content-between">
           <div class="category-name">Teams</div>
-          <div class="category-see-more">See more</div>
+          <div class="category-see-more" routerLink="/teams">See more</div>
         </div>
         <div
           class="d-flex justify-content-between align-items-center container-cards"
@@ -43,8 +35,8 @@
       </div>
       <div>
         <div class="d-flex justify-content-between">
-          <div class="category-name">Couches</div>
-          <div class="category-see-more">See more</div>
+          <div class="category-name">Coaches</div>
+          <div class="category-see-more" routerLink="/coaches">See more</div>
         </div>
         <div
           class="d-flex justify-content-between align-items-center container-cards"
@@ -60,7 +52,7 @@
       <div>
         <div class="d-flex justify-content-between">
           <div class="category-name">Players</div>
-          <div class="category-see-more">See more</div>
+          <div class="category-see-more" routerLink="/players">See more</div>
         </div>
         <div
           class="d-flex justify-content-between align-items-center container-cards"
@@ -76,7 +68,7 @@
       <div>
         <div class="d-flex justify-content-between">
           <div class="category-name">Venues</div>
-          <div class="category-see-more">See more</div>
+          <div class="category-see-more" routerLink="/venues">See more</div>
         </div>
         <div
           class="d-flex justify-content-between align-items-center container-cards"
@@ -90,8 +82,4 @@
         </div>
       </div>
       </div>
-      <div class="footer">HEheasdasd</div>
-
     </div>
-  </div>
-</div>

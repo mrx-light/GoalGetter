@@ -1,0 +1,27 @@
+.menu {
+  width: 15%;
+  padding: 1rem;
+  background-color: #24231f;
+  color: #d6b531;
+}
+
+.menu-header {
+  font-weight: 700;
+  font-size: 1.425rem;
+  margin: 0 0 3rem;
+}
+
+.menu-category {
+  color: white;
+  font-size: 1.325rem;
+}
+
+.menu-category div {
+  padding: 0.8rem;
+}
+.menu-about {
+  padding: 1rem;
+  padding-left: 0;
+  font-size: 1.425rem;
+  font-weight: 700;
+}

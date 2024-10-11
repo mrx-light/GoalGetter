@@ -1,0 +1,34 @@
+<div class="header">
+<div class="w-100 h-100 d-flex justify-content-between align-items-center">
+  <img  src="assets/img/banner.png" alt="logo" class="logo cursor-p" routerLink="/main" />
+  <div class="d-flex header-content align-items-center">
+    @if(!loginRegistration()) {
+      <div class="cursor-p"  routerLink="/login">Login</div>
+      <div class="cursor-p"  routerLink="/registration">Registration</div>
+    }@else {
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Categorys
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" routerLink="/leagues">Leagues</a></li>
+          <li><a class="dropdown-item" routerLink="/teams">Teams</a></li>
+          <li><a class="dropdown-item" routerLink="/players">Players</a></li>
+          <li><a class="dropdown-item" routerLink="/coaches">Coaches</a></li>
+          <li><a class="dropdown-item" routerLink="/venues">Venues</a></li>
+        </ul>
+      </div>
+      <div class="cursor-p"  routerLink="/profile">Profile: {{ userId() }}</div>
+      <div class="cursor-p" (click)="logOut()">LogOut</div>
+      <div class="position-relative search">
+        <input
+          type="text"
+          class="form-control input-header"
+          placeholder="Search"
+        />
+        <i class="bi bi-search search-icon"></i>
+      </div>
+    }
+  </div>
+</div>
+</div>

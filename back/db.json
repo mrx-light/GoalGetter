@@ -9,74 +9,89 @@
       "isActive": true
     },
     {
-      "id": "iulia_2321",
-      "name": "Malanici",
-      "surname": "Petru",
-      "email": "koala@gmail.com",
+      "id": "mihaela_111",
+      "name": "Mihaela",
+      "surname": "Macari",
+      "email": "mihaela@gmail.com",
       "password": "123123",
       "isActive": true
     },
     {
-      "id": "lara_111",
-      "name": "Laura",
-      "surname": "Care",
-      "email": "lara@gmail.com",
-      "password": "1234123",
+      "id": "iopta_pavel",
+      "name": "Pavel",
+      "surname": "Ionescu",
+      "email": "iopta@gmail.com",
+      "password": "123123",
       "isActive": true
     },
     {
-      "id": "tare_123",
-      "name": "Tare",
-      "surname": "Ions",
-      "email": "tare@gmail.com",
-      "password": "1234123",
-      "isActive": true
-    },
-    {
-      "id": "Hohoho",
-      "name": "Hehe",
-      "surname": "Hohoho",
-      "email": "Hohoho@gmail.com",
-      "password": "asas",
+      "id": "ursus_543",
+      "name": "Ursus",
+      "surname": "Topa",
+      "email": "ursus@gmail.com",
+      "password": "iopta1",
       "isActive": true
     }
   ],
   "saved": [
     {
-      "id": "Hohoho",
-      "leagues": [
-        "32"
-      ],
-      "teams": [],
-      "players": [],
-      "couches": [],
-      "venues": []
-    },
-    {
-      "id": "123",
-      "leagues": [
-        "32"
-      ],
-      "teams": [],
-      "players": [],
-      "couches": [],
-      "venues": []
-    },
-    {
-      "id": "1",
-      "leagues": [
-        "32"
-      ],
-      "teams": [],
-      "players": [],
-      "couches": [],
-      "venues": []
-    },
-    {
       "id": "mrx_light",
+      "leagues": [
+        "78",
+        "140"
+      ],
+      "teams": [],
+      "players": [],
+      "coaches": [],
+      "venues": []
+    },
+    {
+      "id": "mihaela_111",
       "leagues": [],
       "teams": [],
       "players": [],
+      "coaches": [],
+      "venues": []
+    },
+    {
+      "id": "iopta_pavel",
+      "leagues": [
+        "21",
+        "71"
+      ],
+      "teams": [
+        "434",
+        "435"
+      ],
+      "players": [
+        {
+          "season": "2022",
+          "id": "164445"
+        },
+        {
+          "season": "2022",
+          "id": "125151"
+        }
+      ],
+      "coaches": [
+        "12330"
+      ],
+      "venues": [
+        "2178"
+      ]
+    },
+    {
+      "id": "ursus_543",
+      "leagues": [
+        "71"
+      ],
+      "teams": [],
+      "players": [
+        {
+          "season": "2021",
+          "id": "44689"
+        }
+      ],
       "coaches": [],
       "venues": []
     }

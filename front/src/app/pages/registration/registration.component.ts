@@ -4,25 +4,30 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RegistrationService } from '../../services/registration.service';
 import { JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { Subject, takeUntil } from 'rxjs';
+import { SavesInterface, UserInterface } from '../../models/interface';
+import { HeaderComponent } from '../../layouts/header/header.component';
+import { UserService } from '../../services/user.service';
+import { SavedPostsService } from '../../services/saved-posts.service';
 
 @Component({
   selector: 'app-registration',
   standalone: true,
-  imports: [ReactiveFormsModule, JsonPipe],
+  imports: [ReactiveFormsModule, JsonPipe, HeaderComponent],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.css',
 })
 export class RegistrationComponent implements OnDestroy {
   form = inject(NonNullableFormBuilder);
   errorServices = inject(ErrorHandlerService);
-  registrationServices = inject(RegistrationService);
+  savedServices = inject(SavedPostsService);
+  userServices = inject(UserService);
   router = inject(Router);
-  ngUnsubscribe = new Subject<void>();
+
+  destroyRef = new Subject<void>();
   registrationForm = this.form.group({
     id: [
       '',
@@ -49,18 +54,18 @@ export class RegistrationComponent implements OnDestroy {
 
   addUser() {
     if (this.registrationForm.valid) {
-      this.registrationServices
+      this.userServices
         .getUserByEmail(this.registrationForm.controls.email.value)
-        .pipe(takeUntil(this.ngUnsubscribe))
+        .pipe(takeUntil(this.destroyRef))
         .subscribe({
-          next: (res: any) => {
-            if (!res.length) {
-              this.registrationServices
+          next: (res: UserInterface) => {
+            if (!res.email) {
+              this.userServices
                 .getUserByUsername(this.registrationForm.controls.id.value)
-                .pipe(takeUntil(this.ngUnsubscribe))
+                .pipe(takeUntil(this.destroyRef))
                 .subscribe({
-                  next: (el: any) => {
-                    if (!el.length) {
+                  next: (el: UserInterface) => {
+                    if (!el.id) {
                       if (
                         this.registrationForm.controls.password.value ===
                         this.registrationForm.controls.confirmPassword.value
@@ -68,16 +73,33 @@ export class RegistrationComponent implements OnDestroy {
                         let obj: any = this.registrationForm.getRawValue();
                         delete obj.confirmPassword;
                         obj.isActive = false;
-                        this.registrationServices
+                        this.userServices
                           .registryUser(obj)
-                          .pipe(takeUntil(this.ngUnsubscribe))
+                          .pipe(takeUntil(this.destroyRef))
                           .subscribe({
                             error: (err) => {
                               this.errorServices.handle(err);
                             },
                           });
-                        alert('You were registered');
-                        this.router.navigateByUrl('/login');
+                        let userSaves: SavesInterface = {
+                          id: this.registrationForm.controls.id.value,
+                          leagues: [],
+                          teams: [],
+                          players: [],
+                          coaches: [],
+                          venues: [],
+                        };
+                        this.savedServices
+                          .addUserToSaves(userSaves)
+                          .pipe(takeUntil(this.destroyRef))
+                          .subscribe({
+                            next: (res) => {
+                              console.log('Worked', res);
+                              alert('You were registered');
+                              this.router.navigateByUrl('/login');
+                            },
+                          });
+
                         return;
                       }
                       this.registrationForm.controls.confirmPassword.setErrors({
@@ -106,7 +128,7 @@ export class RegistrationComponent implements OnDestroy {
     }
   }
   ngOnDestroy() {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+    this.destroyRef.next();
+    this.destroyRef.complete();
   }
 }

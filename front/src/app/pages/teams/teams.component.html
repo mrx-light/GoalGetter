@@ -1,8 +1,6 @@
-<div class="content w-100">
-  <div class="header">
-    <app-header></app-header>
-  </div>
-  <div class="main-players">
+<app-header [userId]="userData?.id"></app-header>
+<div class="main-players w-100">
+  <div class="">
     <div class="d-flex">
       <div class="box">
         <h5 class="p-2">Country</h5>
@@ -53,6 +51,8 @@
                   <td>{{item.venue.surface}}</td>
                   <td>{{item.venue.city}}</td>
                   <td>{{item.venue.capacity}}</td>
+                  <app-save-button [idCategory]="item?.team?.id+''" [category]="'teams'" [userName]="userData?.id"></app-save-button>
+
                 </tr>
               }
             }
@@ -65,7 +65,7 @@
           <pagination-controls (pageChange)="page = $event"></pagination-controls>
         </div>
       </div>
-      <app-team-modal [teamInfo]="team"></app-team-modal>
+      <app-team-modal [teamInfo]="team" [userId]="userData?.id"></app-team-modal>
     </div>
   </div>
 </div>

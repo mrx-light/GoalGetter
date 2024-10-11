@@ -11,7 +11,6 @@ import {
   VenuesInterface,
 } from '../../models/interface';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { ProfileService } from '../../services/profile.service';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -20,6 +19,12 @@ import {
 import { PlayersService } from '../../services/players.service';
 import { LeaguesService } from '../../services/leagues.service';
 import { Subject, takeUntil } from 'rxjs';
+import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
+import { CoachesService } from '../../services/coaches.service';
+import { TeamsService } from '../../services/teams.service';
+import { VenuesService } from '../../services/venues.service';
+import { SavedPostsService } from '../../services/saved-posts.service';
 
 @Component({
   selector: 'app-profile',
@@ -29,6 +34,17 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit, OnDestroy {
+  playerServices = inject(PlayersService);
+  leaguesServices = inject(LeaguesService);
+  loginServices = inject(UserService);
+  teamsServices = inject(TeamsService);
+  venuesServices = inject(VenuesService);
+  userServices = inject(UserService);
+  savedServices = inject(SavedPostsService);
+  navigate = inject(Router);
+  coachesServices = inject(CoachesService);
+  form = inject(NonNullableFormBuilder);
+
   playersArr: PlayerInterface[] = [];
   teamsArr: TeamsInterface[] = [];
   leaguesArr: LeaguesInterface[] = [];
@@ -40,15 +56,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   alreadyCalledPlayers: boolean = false;
   alreadyCalledVenues: boolean = false;
 
-  errorMessage: string = '';
+  destroyRef = new Subject<void>();
+  savesArr: SavesInterface | {} = {};
   user: UserInterface | null = null;
-  page: any;
-  ngUnsubscribe = new Subject<void>();
   category: string = 'leagues';
-  profile = inject(ProfileService);
-  playerServices = inject(PlayersService);
-  leaguesServices = inject(LeaguesService);
-  form = inject(NonNullableFormBuilder);
+  errorMessage: string = '';
+  show: number = 0;
+  page: any;
+
   replaceForm = this.form.group({
     name: [
       '',
@@ -72,14 +87,57 @@ export class ProfileComponent implements OnInit, OnDestroy {
       [Validators.required, Validators.minLength(6), Validators.maxLength(30)],
     ],
   });
-  savesArr: SavesInterface | {} = {};
-  show: number = 0;
+
+  ngOnInit(): void {
+    this.loginServices.getLoggedUser
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (el: UserInterface | null) => {
+          if (el) {
+            this.user = el;
+            this.savedServices
+              .getUsersSavedById(this.user.id)
+              .pipe(takeUntil(this.destroyRef))
+              .subscribe({
+                next: (res: SavesInterface) => {
+                  this.savesArr = res;
+                  if (res.leagues) {
+                    res.leagues.forEach((el: string) => {
+                      this.leaguesServices
+                        .getLeaguesById(el)
+                        .pipe(takeUntil(this.destroyRef))
+                        .subscribe({
+                          next: (response: ResponseInterface) => {
+                            if (response.response[0]) {
+                              this.leaguesArr.push(response.response[0]);
+                              console.log(response.response[0]);
+                            }
+                          },
+                        });
+                    });
+                    if (!res.leagues.length) {
+                      this.errorMessage = 'You dont have liked leagues';
+                    }
+                  }
+                },
+              });
+            return;
+          }
+          this.navigate.navigateByUrl('/login');
+        },
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyRef.next();
+    this.destroyRef.complete();
+  }
 
   updateEmail() {
     let used: any;
-    this.profile
+    this.userServices
       .getUsers()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntil(this.destroyRef))
       .subscribe({
         next: (res: UserInterface[]) => {
           if (res) {
@@ -90,9 +148,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
               if (this.user && this.user.id) {
                 let updatedUser = { ...this.user };
                 updatedUser.email = this.replaceForm.controls.email.value;
-                this.profile
+                this.userServices
                   .updateUserData(this.user!.id, updatedUser)
-                  .pipe(takeUntil(this.ngUnsubscribe))
+                  .pipe(takeUntil(this.destroyRef))
                   .subscribe({
                     next: (response: UserInterface) => {
                       if (response.id) {
@@ -120,9 +178,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
       if (this.user && this.user.id) {
         let updatedUser = { ...this.user };
         updatedUser.name = this.replaceForm.controls.name.value;
-        this.profile
+        this.userServices
           .updateUserData(this.user!.id, updatedUser)
-          .pipe(takeUntil(this.ngUnsubscribe))
+          .pipe(takeUntil(this.destroyRef))
           .subscribe({
             next: (response: UserInterface) => {
               if (response.id) {
@@ -144,9 +202,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
       if (this.user && this.user.id) {
         let updatedUser = { ...this.user };
         updatedUser.surname = this.replaceForm.controls.surname.value;
-        this.profile
+        this.userServices
           .updateUserData(this.user!.id, updatedUser)
-          .pipe(takeUntil(this.ngUnsubscribe))
+          .pipe(takeUntil(this.destroyRef))
           .subscribe({
             next: (response: UserInterface) => {
               if (response.id) {
@@ -177,9 +235,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
             let updatedUser = { ...this.user };
             updatedUser.password =
               this.replaceForm.controls.confirmPassword.value;
-            this.profile
+            this.userServices
               .updateUserData(this.user!.id, updatedUser)
-              .pipe(takeUntil(this.ngUnsubscribe))
+              .pipe(takeUntil(this.destroyRef))
               .subscribe({
                 next: (response: UserInterface) => {
                   if (response.id) {
@@ -216,9 +274,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (!this.alreadyCalledCoaches) {
           this.alreadyCalledCoaches = true;
           this.savesArr.coaches.forEach((el: string) => {
-            this.playerServices
-              .getCoachBy(el)
-              .pipe(takeUntil(this.ngUnsubscribe))
+            this.coachesServices
+              .getCoachById(el)
+              .pipe(takeUntil(this.destroyRef))
               .subscribe({
                 next: (response: ResponseInterface) => {
                   this.coachesArr.push(response.response[0]);
@@ -236,9 +294,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (!this.alreadyCalledTeams) {
           this.alreadyCalledTeams = true;
           this.savesArr.teams.forEach((el: string) => {
-            this.playerServices
+            this.teamsServices
               .getTeamById(el)
-              .pipe(takeUntil(this.ngUnsubscribe))
+              .pipe(takeUntil(this.destroyRef))
               .subscribe({
                 next: (response: ResponseInterface) => {
                   this.teamsArr.push(response.response[0]);
@@ -256,9 +314,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (!this.alreadyCalledVenues) {
           this.alreadyCalledVenues = true;
           this.savesArr.venues.forEach((el: string) => {
-            this.playerServices
+            this.venuesServices
               .getVenueById(el)
-              .pipe(takeUntil(this.ngUnsubscribe))
+              .pipe(takeUntil(this.destroyRef))
               .subscribe({
                 next: (response: ResponseInterface) => {
                   this.venuesArr.push(response.response[0]);
@@ -279,7 +337,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             (el: { id: string; season: string }) => {
               this.playerServices
                 .getPlayerById(el.id, el.season)
-                .pipe(takeUntil(this.ngUnsubscribe))
+                .pipe(takeUntil(this.destroyRef))
                 .subscribe({
                   next: (response: ResponseInterface) => {
                     this.playersArr.push(response.response[0]);
@@ -358,9 +416,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
       }
       if ('id' in this.savesArr && this.savesArr?.id) {
-        this.profile
+        this.savedServices
           .updateUserSaved(this.savesArr.id, this.savesArr)
-          .pipe(takeUntil(this.ngUnsubscribe))
+          .pipe(takeUntil(this.destroyRef))
           .subscribe();
       }
     }
@@ -368,44 +426,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   toggleProfileBox(i: number) {
     this.show = i;
-  }
-
-  ngOnInit(): void {
-    this.profile
-      .getUser('mrx_light')
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: UserInterface) => {
-          this.user = res;
-        },
-      });
-    this.profile
-      .getUsersSavedById('mrx_light')
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: SavesInterface) => {
-          this.savesArr = res;
-          if (res.leagues) {
-            res.leagues.forEach((el: string) => {
-              this.leaguesServices
-                .getLeaguesById(el)
-                .pipe(takeUntil(this.ngUnsubscribe))
-                .subscribe({
-                  next: (response: ResponseInterface) => {
-                    this.leaguesArr.push(response.response[0]);
-                  },
-                });
-            });
-            if (!res.leagues.length) {
-              this.errorMessage = 'You dont have liked leagues';
-            }
-          }
-        },
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 }

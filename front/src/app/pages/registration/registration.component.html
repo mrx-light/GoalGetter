@@ -1,4 +1,5 @@
-<div class="h-100 d-flex justify-content-center align-items-center">
+<app-header [loginRegistration]="false"></app-header>
+<div class="d-flex justify-content-center align-items-center">
   <form class="reg-form" [formGroup]="registrationForm">
     <div class="mb-3">
       <label for="name" class="form-label">Name</label>
@@ -38,7 +39,7 @@
         registrationForm.controls.surname.invalid &&
         (registrationForm.controls.surname.dirty ||
           !registrationForm.controls.surname.untouched)
-        ) {
+      ) {
         @if (registrationForm.controls.surname.errors?.["required"]) {
           <small class="validation">This field is required</small>
         }
@@ -63,7 +64,7 @@
         registrationForm.controls.id.invalid &&
         (registrationForm.controls.id.dirty ||
           !registrationForm.controls.id.untouched)
-        ) {
+      ) {
         @if (registrationForm.controls.id.errors?.["required"]) {
           <small class="validation">This field is required</small>
         }
@@ -74,7 +75,9 @@
           <small class="validation">The username is too big</small>
         }
         @if (registrationForm.controls.id.errors?.["idCheck"]) {
-          <small class="validation">{{registrationForm.controls.id.errors?.["idCheck"]}}</small>
+          <small class="validation">{{
+            registrationForm.controls.id.errors?.["idCheck"]
+          }}</small>
         }
       }
     </div>
@@ -91,7 +94,7 @@
         registrationForm.controls.email.invalid &&
         (registrationForm.controls.email.dirty ||
           !registrationForm.controls.email.untouched)
-        ) {
+      ) {
         @if (registrationForm.controls.email.errors?.["required"]) {
           <small class="validation">This field is required</small>
         }
@@ -99,7 +102,9 @@
           <small class="validation">Please introduce a email</small>
         }
         @if (registrationForm.controls.email.errors?.["checkEmail"]) {
-          <small class="validation">{{registrationForm.controls.email.errors?.["checkEmail"]}}</small>
+          <small class="validation">{{
+            registrationForm.controls.email.errors?.["checkEmail"]
+          }}</small>
         }
       }
     </div>
@@ -115,7 +120,7 @@
         registrationForm.controls.password.invalid &&
         (registrationForm.controls.password.dirty ||
           !registrationForm.controls.password.untouched)
-        ) {
+      ) {
         @if (registrationForm.controls.password.errors?.["required"]) {
           <small class="validation">This field is required</small>
         }
@@ -139,7 +144,7 @@
         registrationForm.controls.confirmPassword.invalid &&
         (registrationForm.controls.confirmPassword.dirty ||
           !registrationForm.controls.confirmPassword.untouched)
-        ) {
+      ) {
         @if (registrationForm.controls.confirmPassword.errors?.["required"]) {
           <small class="validation">This field is required</small>
         }
@@ -149,12 +154,21 @@
         @if (registrationForm.controls.confirmPassword.errors?.["maxlength"]) {
           <small class="validation">The confirm password is too big</small>
         }
-        @if (registrationForm.controls.confirmPassword.errors?.["passwordCheck"]) {
-          <small class="validation">{{registrationForm.controls.confirmPassword.errors?.["passwordCheck"]}}</small>
+        @if (
+          registrationForm.controls.confirmPassword.errors?.["passwordCheck"]
+        ) {
+          <small class="validation">{{
+            registrationForm.controls.confirmPassword.errors?.["passwordCheck"]
+          }}</small>
         }
       }
     </div>
-    <button [disabled]="!registrationForm.valid" (click)="addUser()" type="submit" class="btn btn-primary">
+    <button
+      [disabled]="!registrationForm.valid"
+      (click)="addUser()"
+      type="submit"
+      class="btn btn-primary"
+    >
       Submit
     </button>
   </form>

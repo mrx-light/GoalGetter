@@ -1,6 +1,6 @@
 <div class="content w-100">
   <div class="header">
-    <app-header></app-header>
+    <app-header [userId]="user?.id"></app-header>
   </div>
   <div class="main-players">
     <div class="container">
@@ -97,15 +97,15 @@
                   @if (leaguesArr.length) {
                     @for (item of leaguesArr | paginate: { itemsPerPage: 10, currentPage: page }; track $index) {
                       <tr>
-                        <td>{{ item.league.id }}</td>
+                        <td>{{ item?.league?.id }}</td>
                         <td>
-                          <img [src]="item.country.flag" class="img-flag" alt="photo"/>{{
-                            item.country.name
+                          <img [src]="item?.country?.flag" class="img-flag" alt="photo"/>{{
+                            item?.country?.name
                           }}
                         </td>
                         <td>
-                          <img [src]="item.league.logo" class="img-name" alt="photo"/>{{
-                            item.league.name
+                          <img [src]="item?.league?.logo" class="img-name" alt="photo"/>{{
+                            item?.league?.name
                           }}
                         </td>
 
@@ -113,7 +113,7 @@
                         <td>{{ item?.seasons?.[0]?.start }}</td>
                         <td>{{ item?.seasons?.[0]?.end }}</td>
                         <td>{{ item?.seasons?.[0]?.current }}</td>
-                        <td><i class="bi bi-trash" (click)="removeSaved(item.league.id +'')"></i></td>
+                        <td><i class="bi bi-trash" (click)="removeSaved(item?.league?.id +'')"></i></td>
                       </tr>
                     }
                   }

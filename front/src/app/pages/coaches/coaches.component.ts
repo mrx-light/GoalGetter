@@ -4,42 +4,95 @@ import { PlayersService } from '../../services/players.service';
 import {
   CoachesInterface,
   CountryInterface,
+  ResponseInterface,
   TeamsInterface,
+  UserInterface,
 } from '../../models/interface';
 import { Subject, takeUntil } from 'rxjs';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { UserService } from '../../services/user.service';
+import { Router, RouterLink } from '@angular/router';
+import { SaveButtonComponent } from '../../layouts/save-button/save-button.component';
+import { TeamsService } from '../../services/teams.service';
+import { CoachesService } from '../../services/coaches.service';
 
 @Component({
   selector: 'app-coaches',
   standalone: true,
-  imports: [HeaderComponent, NgxPaginationModule],
+  imports: [
+    HeaderComponent,
+    NgxPaginationModule,
+    SaveButtonComponent,
+    RouterLink,
+  ],
   templateUrl: './coaches.component.html',
   styleUrls: ['./coaches.component.css'],
 })
 export class CoachesComponent implements OnInit, OnDestroy {
   playersServices = inject(PlayersService);
-  couchesArr: CoachesInterface[] | [] = [];
-  teamsArr: TeamsInterface[] | undefined = undefined;
-  countryArr: CountryInterface[] | undefined = undefined;
-  couch: CoachesInterface | undefined = undefined;
+  loginServices = inject(UserService);
+  navigate = inject(Router);
+  teamsServices = inject(TeamsService);
+  coachesServices = inject(CoachesService);
+
+  userData: UserInterface | null = null;
+  couchesArr: CoachesInterface[] = [];
+  teamsArr: TeamsInterface[] = [];
+  countryArr: CountryInterface[] = [];
+
   teamName: undefined | string | number = undefined;
   countryName: undefined | string = undefined;
+  destroyRef = new Subject<void>();
   page: any;
-  ngUnsubscribe = new Subject<void>();
+
   countryErrorMessage: string | undefined = undefined;
   teamErrorMessage: string | undefined = undefined;
   couchErrorMessage: string | undefined = undefined;
 
+  ngOnInit(): void {
+    this.loginServices.getLoggedUser
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (el: UserInterface | null) => {
+          if (el) {
+            this.userData = el;
+            this.playersServices
+              .getCountry()
+              .pipe(takeUntil(this.destroyRef))
+              .subscribe({
+                next: (res: any) => {
+                  if (res.errors.plan) {
+                    this.countryErrorMessage = res.errors.plan;
+                    console.log(res.errors.plan);
+                    return;
+                  }
+                  this.countryArr = res.response;
+                },
+                error: (err) => {
+                  console.error(err);
+                },
+              });
+            return;
+          }
+          this.navigate.navigateByUrl('/login');
+        },
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyRef.next();
+    this.destroyRef.complete();
+  }
+
   setCountry(country: string) {
     this.countryName = country;
-    this.playersServices
+    this.teamsServices
       .getTeams(country)
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntil(this.destroyRef))
       .subscribe({
-        next: (res: any) => {
+        next: (res: ResponseInterface) => {
           if (res.errors.plan) {
             this.teamErrorMessage = res.errors.plan;
-            console.log(res.errors.plan);
             return;
           }
           this.teamsArr = res.response;
@@ -58,11 +111,11 @@ export class CoachesComponent implements OnInit, OnDestroy {
   getCouches() {
     this.couchErrorMessage = undefined;
     if (this.teamName) {
-      this.playersServices
+      this.coachesServices
         .getCouches(this.teamName)
-        .pipe(takeUntil(this.ngUnsubscribe))
+        .pipe(takeUntil(this.destroyRef))
         .subscribe({
-          next: (res: any) => {
+          next: (res: ResponseInterface) => {
             if (res.errors.plan) {
               this.couchErrorMessage = res.errors.plan;
               console.log(res.errors.plan);
@@ -75,29 +128,5 @@ export class CoachesComponent implements OnInit, OnDestroy {
           },
         });
     }
-  }
-
-  ngOnInit(): void {
-    this.playersServices
-      .getCountry()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: any) => {
-          if (res.errors.plan) {
-            this.countryErrorMessage = res.errors.plan;
-            console.log(res.errors.plan);
-            return;
-          }
-          this.countryArr = res.response;
-        },
-        error: (err) => {
-          console.error(err);
-        },
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 }

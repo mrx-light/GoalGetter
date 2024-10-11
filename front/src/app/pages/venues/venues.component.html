@@ -1,7 +1,6 @@
-<div class="content w-100">
-  <div class="header">
-    <app-header></app-header>
-  </div>
+<app-header [userId]="userData?.id"></app-header>
+
+
   <div class="main-players">
     <div class="d-flex">
       <div class="box">
@@ -63,6 +62,8 @@
                   <td>{{ item.address }}</td>
                   <td>{{ item.surface }}</td>
                   <td>{{ item.city }}</td>
+                  <app-save-button [idCategory]="item.id+''" [category]="'venues'" [userName]="userData?.id"></app-save-button>
+
                 </tr>
               }
             }
@@ -78,8 +79,7 @@
             (pageChange)="page = $event"
           ></pagination-controls>
         </div>
-        <app-venue-modal [venue]="venue"></app-venue-modal>
+        <app-venue-modal [venue]="venue" [userId]="userData?.id"></app-venue-modal>
       </div>
     </div>
   </div>
-</div>

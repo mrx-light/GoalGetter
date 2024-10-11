@@ -224,9 +224,9 @@ export interface ResponseInterface {
   get: string;
   parameters: {
     id: string;
-    season: 2019;
+    season: number;
   };
-  errors: any[];
+  errors: any;
   results: number;
   paging: {
     current: number | null;
