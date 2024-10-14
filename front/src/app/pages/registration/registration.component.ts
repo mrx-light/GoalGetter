@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, ViewChild } from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -12,11 +12,19 @@ import { SavesInterface, UserInterface } from '../../models/interface';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { UserService } from '../../services/user.service';
 import { SavedPostsService } from '../../services/saved-posts.service';
+import { ErrorToastsComponent } from '../../layouts/error-toasts/error-toasts.component';
+import { WarningToastsComponent } from '../../layouts/warning-toasts/warning-toasts.component';
 
 @Component({
   selector: 'app-registration',
   standalone: true,
-  imports: [ReactiveFormsModule, JsonPipe, HeaderComponent],
+  imports: [
+    ReactiveFormsModule,
+    JsonPipe,
+    HeaderComponent,
+    ErrorToastsComponent,
+    WarningToastsComponent,
+  ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.css',
 })
@@ -26,6 +34,9 @@ export class RegistrationComponent implements OnDestroy {
   savedServices = inject(SavedPostsService);
   userServices = inject(UserService);
   router = inject(Router);
+
+  @ViewChild('error') errorToast!: ErrorToastsComponent;
+  @ViewChild('warning') warningToast!: WarningToastsComponent;
 
   destroyRef = new Subject<void>();
   registrationForm = this.form.group({
@@ -58,10 +69,10 @@ export class RegistrationComponent implements OnDestroy {
         .getUserByEmail(this.registrationForm.controls.email.value)
         .pipe(takeUntil(this.destroyRef))
         .subscribe({
-          next: (res: UserInterface) => {
-            if (!res.email) {
+          next: (res: UserInterface[]) => {
+            if (!res.length) {
               this.userServices
-                .getUserByUsername(this.registrationForm.controls.id.value)
+                .getUserById(this.registrationForm.controls.id.value)
                 .pipe(takeUntil(this.destroyRef))
                 .subscribe({
                   next: (el: UserInterface) => {
@@ -77,8 +88,12 @@ export class RegistrationComponent implements OnDestroy {
                           .registryUser(obj)
                           .pipe(takeUntil(this.destroyRef))
                           .subscribe({
+                            next: () => {},
                             error: (err) => {
-                              this.errorServices.handle(err);
+                              this.errorServices.errorHandlerUser(
+                                err,
+                                this.errorToast,
+                              );
                             },
                           });
                         let userSaves: SavesInterface = {
@@ -93,13 +108,17 @@ export class RegistrationComponent implements OnDestroy {
                           .addUserToSaves(userSaves)
                           .pipe(takeUntil(this.destroyRef))
                           .subscribe({
-                            next: (res) => {
-                              console.log('Worked', res);
+                            next: () => {
                               alert('You were registered');
                               this.router.navigateByUrl('/login');
                             },
+                            error: (err) => {
+                              this.errorServices.errorHandlerUser(
+                                err,
+                                this.errorToast,
+                              );
+                            },
                           });
-
                         return;
                       }
                       this.registrationForm.controls.confirmPassword.setErrors({
@@ -112,7 +131,7 @@ export class RegistrationComponent implements OnDestroy {
                     });
                   },
                   error: (err) => {
-                    this.errorServices.handle(err);
+                    this.errorServices.errorHandlerUser(err, this.errorToast);
                   },
                 });
               return;
@@ -122,7 +141,7 @@ export class RegistrationComponent implements OnDestroy {
             });
           },
           error: (err) => {
-            this.errorServices.handle(err);
+            this.errorServices.errorHandlerUser(err, this.errorToast);
           },
         });
     }

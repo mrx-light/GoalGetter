@@ -234,3 +234,14 @@ export interface ResponseInterface {
   };
   response: any;
 }
+
+export interface UserErrorInterface {
+  error: any;
+  headers: any;
+  message: string;
+  name: string;
+  ok: boolean;
+  status: number | boolean;
+  statusText: string | boolean;
+  url: string;
+}

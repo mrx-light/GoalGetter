@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { LeaguesCardComponent } from '../../components/leagues-card/leagues-card.component';
 import { TeamCardComponent } from '../../components/team-card/team-card.component';
@@ -25,6 +25,8 @@ import { PlayersService } from '../../services/players.service';
 import { CoachesService } from '../../services/coaches.service';
 import { TeamsService } from '../../services/teams.service';
 import { LeaguesService } from '../../services/leagues.service';
+import { ErrorToastsComponent } from '../../layouts/error-toasts/error-toasts.component';
+import { WarningToastsComponent } from '../../layouts/warning-toasts/warning-toasts.component';
 
 @Component({
   selector: 'app-main',
@@ -39,6 +41,8 @@ import { LeaguesService } from '../../services/leagues.service';
     MenuComponent,
     HeaderComponent,
     RouterLink,
+    ErrorToastsComponent,
+    WarningToastsComponent,
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
@@ -62,6 +66,9 @@ export class MainComponent implements OnInit, OnDestroy {
   limitedVenues: VenuesInterface[] = [];
   userData: UserInterface | null = null;
 
+  @ViewChild('error') errorToast!: ErrorToastsComponent;
+  @ViewChild('warning') warningToast!: WarningToastsComponent;
+
   ngOnInit() {
     this.loginServices.getLoggedUser
       .pipe(takeUntil(this.destroyRef))
@@ -69,83 +76,123 @@ export class MainComponent implements OnInit, OnDestroy {
         next: (el: null | UserInterface) => {
           if (el) {
             this.userData = el;
-            this.leaguesServices
-              .getLeagues()
-              .pipe(takeUntil(this.destroyRef))
-              .subscribe({
-                next: (res: ResponseInterface) => {
-                  const getLeagues = res.response;
-                  this.limitedLeagues = getLeagues.slice(0, 5);
-                },
-                error: (err) => {
-                  this.errorServices.errorHandleProfile(err);
-                },
-              });
-            this.teamsServices
-              .getTeams('Spain')
-              .pipe(takeUntil(this.destroyRef))
-              .subscribe({
-                next: (res: ResponseInterface) => {
-                  const getTeams = res.response;
-                  this.limitedTeams = getTeams.slice(0, 5);
-                },
-                error: (err) => {
-                  this.errorServices.errorHandleProfile(err);
-                },
-              });
-            this.coachesServices
-              .getCouches('44')
-              .pipe(takeUntil(this.destroyRef))
-              .subscribe({
-                next: (res: ResponseInterface) => {
-                  const getCoach = res.response;
-                  if (getCoach.length > 5) {
-                    this.limitedCoach = getCoach.slice(0, 5);
-                    return;
-                  }
-                  this.limitedCoach = getCoach;
-                },
-                error: (err) => {
-                  this.errorServices.errorHandleProfile(err);
-                },
-              });
-            this.playersServices
-              .getPlayers('67', '2022')
-              .pipe(takeUntil(this.destroyRef))
-              .subscribe({
-                next: (res: ResponseInterface) => {
-                  const getPlayers = res.response;
-                  if (getPlayers.length > 5) {
-                    this.limitedPlayers = getPlayers.slice(0, 5);
-                    return;
-                  }
-                  this.limitedPlayers = getPlayers;
-                },
-                error: (err) => {
-                  this.errorServices.errorHandleProfile(err);
-                },
-              });
-            this.venuesServices
-              .getVenues('Spain')
-              .pipe(takeUntil(this.destroyRef))
-              .subscribe({
-                next: (res: ResponseInterface) => {
-                  const getVenues = res.response;
-                  if (getVenues.length > 5) {
-                    this.limitedVenues = getVenues.slice(0, 5);
-                    return;
-                  }
-                  this.limitedVenues = getVenues;
-                },
-                error: (err) => {
-                  this.errorServices.errorHandleProfile(err);
-                },
-              });
+            this.getCategories();
             return;
           }
           this.navigate.navigateByUrl('/login');
         },
       });
+  }
+
+  getCategories() {
+    this.leaguesServices
+      .getLeagues()
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (res: ResponseInterface) => {
+          if (res.errors.length) {
+            this.errorServices.warningHandler(
+              'We could not het the leagues, try again later',
+              this.warningToast,
+            );
+            return;
+          }
+          const getLeagues = res.response;
+          this.limitedLeagues = getLeagues.slice(0, 5);
+        },
+        error: (err) => {
+          this.errorServices.errorHandlerUser(err, this.errorToast);
+        },
+      });
+    this.teamsServices
+      .getTeams('Spain')
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (res: ResponseInterface) => {
+          if (res.errors.length) {
+            this.errorServices.warningHandler(
+              'We could not het the teams, try again later',
+              this.warningToast,
+            );
+            return;
+          }
+          const getTeams = res.response;
+          this.limitedTeams = getTeams.slice(0, 5);
+        },
+        error: (err) => {
+          this.errorServices.errorHandlerUser(err, this.errorToast);
+        },
+      });
+    this.coachesServices
+      .getCouches('44')
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (res: ResponseInterface) => {
+          if (res.errors.length) {
+            this.errorServices.warningHandler(
+              'We could not het the coaches, try again later',
+              this.warningToast,
+            );
+            return;
+          }
+          const getCoach = res.response;
+          if (getCoach.length > 5) {
+            this.limitedCoach = getCoach.slice(0, 5);
+            return;
+          }
+          this.limitedCoach = getCoach;
+        },
+        error: (err) => {
+          this.errorServices.errorHandlerUser(err, this.errorToast);
+        },
+      });
+    this.playersServices
+      .getPlayers('67', '2022')
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (res: ResponseInterface) => {
+          if (res.errors.length) {
+            this.errorServices.warningHandler(
+              'We could not het the players, try again later',
+              this.warningToast,
+            );
+            return;
+          }
+          const getPlayers = res.response;
+          if (getPlayers.length > 5) {
+            this.limitedPlayers = getPlayers.slice(0, 5);
+            return;
+          }
+          this.limitedPlayers = getPlayers;
+        },
+        error: (err) => {
+          this.errorServices.errorHandlerUser(err, this.errorToast);
+        },
+      });
+    this.venuesServices
+      .getVenues('Spain')
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (res: ResponseInterface) => {
+          if (res.errors.length) {
+            this.errorServices.warningHandler(
+              'We could not het the venues, try again later',
+              this.warningToast,
+            );
+            return;
+          }
+          const getVenues = res.response;
+          if (getVenues.length > 5) {
+            this.limitedVenues = getVenues.slice(0, 5);
+            return;
+          }
+          this.limitedVenues = getVenues;
+        },
+        error: (err) => {
+          this.errorServices.errorHandlerUser(err, this.errorToast);
+        },
+      });
+    return;
   }
 
   ngOnDestroy(): void {

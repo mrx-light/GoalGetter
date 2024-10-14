@@ -3,6 +3,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { HeaderComponent } from '../../layouts/header/header.component';
@@ -20,6 +21,9 @@ import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { SaveButtonComponent } from '../../layouts/save-button/save-button.component';
 import { TeamsService } from '../../services/teams.service';
+import { ErrorToastsComponent } from '../../layouts/error-toasts/error-toasts.component';
+import { WarningToastsComponent } from '../../layouts/warning-toasts/warning-toasts.component';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-teams',
@@ -29,11 +33,14 @@ import { TeamsService } from '../../services/teams.service';
     NgxPaginationModule,
     TeamModalComponent,
     SaveButtonComponent,
+    ErrorToastsComponent,
+    WarningToastsComponent,
   ],
   templateUrl: './teams.component.html',
   styleUrl: './teams.component.css',
 })
 export class TeamsComponent implements OnInit, OnDestroy {
+  errorServices = inject(ErrorHandlerService);
   playerServices = inject(PlayersService);
   loginServices = inject(UserService);
   teamsServices = inject(TeamsService);
@@ -51,7 +58,8 @@ export class TeamsComponent implements OnInit, OnDestroy {
   page: any;
 
   @ViewChildren(TeamModalComponent) modal!: TeamModalComponent;
-
+  @ViewChild('error') errorToast!: ErrorToastsComponent;
+  @ViewChild('warning') warningToast!: WarningToastsComponent;
   ngOnInit(): void {
     this.loginServices.getLoggedUser
       .pipe(takeUntil(this.destroyRef))
@@ -60,23 +68,7 @@ export class TeamsComponent implements OnInit, OnDestroy {
           if (el) {
             this.userData = el;
             this.errorCountryMessage = null;
-            this.playerServices
-              .getCountry()
-              .pipe(takeUntil(this.destroyRef))
-              .subscribe({
-                next: (res: ResponseInterface) => {
-                  console.log(res);
-                  if (res.errors && res.errors.plan) {
-                    this.errorCountryMessage = res.errors.plan;
-                    console.log(res.errors.plan);
-                    return;
-                  }
-                  this.countryArray = res.response;
-                },
-                error: (err) => {
-                  console.log(err);
-                },
-              });
+            this.getCountries();
             return;
           }
           this.navigate.navigateByUrl('/login');
@@ -87,6 +79,27 @@ export class TeamsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyRef.next();
     this.destroyRef.complete();
+  }
+
+  getCountries() {
+    this.playerServices
+      .getCountry()
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (res: ResponseInterface) => {
+          if (res.errors && res.errors.plan) {
+            this.errorCountryMessage = res.errors.plan;
+            this.errorServices.warningHandler(' ', this.warningToast);
+            console.log(res.errors.plan);
+            return;
+          }
+          this.countryArray = res.response;
+        },
+        error: (err) => {
+          this.errorServices.errorHandlerUser(err, this.errorToast);
+        },
+      });
+    return;
   }
 
   passDataModal(obj: TeamsInterface) {
@@ -120,16 +133,16 @@ export class TeamsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyRef))
       .subscribe({
         next: (res: ResponseInterface) => {
-          console.log(res);
           if (res.errors && res.errors.plan) {
             this.errorTeamsMessage = res.errors.plan;
+            this.errorServices.warningHandler(' ', this.warningToast);
             console.log(res.errors.plan);
             return;
           }
           this.teamsArr = res.response;
         },
         error: (err) => {
-          console.log(err);
+          this.errorServices.errorHandlerUser(err, this.errorToast);
         },
       });
   }

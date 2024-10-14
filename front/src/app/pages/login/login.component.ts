@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, ViewChild } from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -10,11 +10,19 @@ import { ErrorHandlerService } from '../../services/error-handler.service';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { HeaderComponent } from '../../layouts/header/header.component';
+import { ErrorToastsComponent } from '../../layouts/error-toasts/error-toasts.component';
+import { HeadersService } from '../../services/headers.service';
+import { WarningToastsComponent } from '../../layouts/warning-toasts/warning-toasts.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, HeaderComponent],
+  imports: [
+    ReactiveFormsModule,
+    HeaderComponent,
+    ErrorToastsComponent,
+    WarningToastsComponent,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -23,6 +31,11 @@ export class LoginComponent implements OnDestroy {
   loginServices = inject(UserService);
   route = inject(Router);
   form = inject(NonNullableFormBuilder);
+
+  headers = inject(HeadersService);
+
+  @ViewChild('error') errorToast!: ErrorToastsComponent;
+  @ViewChild('warning') warningToast!: WarningToastsComponent;
 
   loginForm = this.form.group({
     emailUser: [
@@ -58,7 +71,7 @@ export class LoginComponent implements OnDestroy {
                 .getUserByEmail(this.loginForm.controls.emailUser.value)
                 .pipe(takeUntil(this.destroyRef))
                 .subscribe({
-                  next: (res: any) => {
+                  next: (res: UserInterface[]) => {
                     if (res.length) {
                       let obj: UserInterface = res[0];
                       if (
@@ -75,10 +88,17 @@ export class LoginComponent implements OnDestroy {
                                 this.route.navigateByUrl('/main');
                                 return;
                               }
-                              alert('We could not log you in');
+                              this.errorServices.warningHandler(
+                                'We could not log you in!',
+
+                                this.errorToast,
+                              );
                             },
                             error: (err) => {
-                              this.errorServices.handle(err);
+                              this.errorServices.errorHandlerUser(
+                                err,
+                                this.errorToast,
+                              );
                             },
                           });
                         return;
@@ -93,7 +113,7 @@ export class LoginComponent implements OnDestroy {
                     });
                   },
                   error: (err) => {
-                    this.errorServices.handle(err);
+                    this.errorServices.errorHandlerUser(err, this.errorToast);
                   },
                 });
             }

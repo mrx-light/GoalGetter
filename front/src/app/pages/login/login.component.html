@@ -1,69 +1,73 @@
+<app-error-toasts #error></app-error-toasts>
+<app-warning-toasts #warning></app-warning-toasts>
+<app-header [loginRegistration]="false"></app-header>
 
-  <app-header [loginRegistration]="false"></app-header>
-
-<div class=" d-flex align-items-center justify-content-center">
-  <form class="reg-form" [formGroup]="loginForm">
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Email address</label>
-      <input
-        formControlName="emailUser"
-        type="email"
-        class="form-control"
-        id="exampleInputEmail1"
-        aria-describedby="emailHelp"
-      />
-      <div id="emailHelp" class="form-text">
-        We'll never share your email with anyone else.
+<div class="container">
+  <div class=" d-flex align-items-center justify-content-center">
+    <form class="reg-form odd-backg " [formGroup]="loginForm">
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label  fw-bold">Email address</label>
+        <input
+          formControlName="emailUser"
+          type="email"
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+          placeholder="Email"
+        />
+        @if (
+          loginForm.controls.emailUser.invalid &&
+          (loginForm.controls.emailUser.dirty ||
+            !loginForm.controls.emailUser.untouched)
+          ) {
+          @if (loginForm.controls.emailUser.errors?.["required"]) {
+            <small class="validation">This field is required</small>
+          }
+          @if (loginForm.controls.emailUser.errors?.["email"]) {
+            <small class="validation">This field should be email</small>
+          }
+          @if (loginForm.controls.emailUser.errors?.["undefinedUser"]) {
+            <small class="validation">{{
+                loginForm.controls.emailUser.errors?.["undefinedUser"]
+              }}</small>
+          }
+        }
       </div>
-      @if (
-        loginForm.controls.emailUser.invalid &&
-        (loginForm.controls.emailUser.dirty ||
-          !loginForm.controls.emailUser.untouched)
-      ) {
-        @if (loginForm.controls.emailUser.errors?.["required"]) {
-          <small class="validation">This field is required</small>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label  fw-bold">Password</label>
+        <input
+          formControlName="password"
+          type="password"
+          class="form-control"
+          id="exampleInputPassword1"
+          placeholder="Password"
+          autocomplete="false"
+        />
+        @if (
+          loginForm.controls.password.invalid &&
+          (loginForm.controls.password.dirty ||
+            !loginForm.controls.password.untouched)
+          ) {
+          @if (loginForm.controls.password.errors?.["required"]) {
+            <small class="validation">This field is required</small>
+          }
+          @if (loginForm.controls.password.errors?.["minlength"]) {
+            <small class="validation">The name is too small</small>
+          }
+          @if (loginForm.controls.password.errors?.["maxlength"]) {
+            <small class="validation">The name is too big</small>
+          }
+          @if (loginForm.controls.password.errors?.["wrongPassword"]) {
+            <small class="validation">{{
+                loginForm.controls.password.errors?.["wrongPassword"]
+              }}</small>
+          }
         }
-        @if (loginForm.controls.emailUser.errors?.["email"]) {
-          <small class="validation">This field should be email</small>
-        }
-        @if (loginForm.controls.emailUser.errors?.["undefinedUser"]) {
-          <small class="validation">{{
-            loginForm.controls.emailUser.errors?.["undefinedUser"]
-          }}</small>
-        }
-      }
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Password</label>
-      <input
-        formControlName="password"
-        type="password"
-        class="form-control"
-        id="exampleInputPassword1"
-      />
-      @if (
-        loginForm.controls.password.invalid &&
-        (loginForm.controls.password.dirty ||
-          !loginForm.controls.password.untouched)
-      ) {
-        @if (loginForm.controls.password.errors?.["required"]) {
-          <small class="validation">This field is required</small>
-        }
-        @if (loginForm.controls.password.errors?.["minlength"]) {
-          <small class="validation">The name is too small</small>
-        }
-        @if (loginForm.controls.password.errors?.["maxlength"]) {
-          <small class="validation">The name is too big</small>
-        }
-        @if (loginForm.controls.password.errors?.["wrongPassword"]) {
-          <small class="validation">{{
-            loginForm.controls.password.errors?.["wrongPassword"]
-          }}</small>
-        }
-      }
-    </div>
-    <button [disabled]="!loginForm.valid" (click)="logIN()" type="submit" class="btn btn-primary">
-      Submit
-    </button>
-  </form>
+      </div>
+      <button [disabled]="!loginForm.valid" (click)="logIN()" type="submit" class="btn btn-dark fw-bold">
+        Submit
+      </button>
+    </form>
+  </div>
+
 </div>

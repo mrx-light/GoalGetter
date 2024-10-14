@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import {
   CoachesInterface,
@@ -25,15 +25,25 @@ import { CoachesService } from '../../services/coaches.service';
 import { TeamsService } from '../../services/teams.service';
 import { VenuesService } from '../../services/venues.service';
 import { SavedPostsService } from '../../services/saved-posts.service';
+import { ErrorToastsComponent } from '../../layouts/error-toasts/error-toasts.component';
+import { WarningToastsComponent } from '../../layouts/warning-toasts/warning-toasts.component';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [HeaderComponent, NgxPaginationModule, ReactiveFormsModule],
+  imports: [
+    HeaderComponent,
+    NgxPaginationModule,
+    ReactiveFormsModule,
+    ErrorToastsComponent,
+    WarningToastsComponent,
+  ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit, OnDestroy {
+  errorServices = inject(ErrorHandlerService);
   playerServices = inject(PlayersService);
   leaguesServices = inject(LeaguesService);
   loginServices = inject(UserService);
@@ -64,6 +74,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   show: number = 0;
   page: any;
 
+  @ViewChild('error') errorToast!: ErrorToastsComponent;
+  @ViewChild('warning') warningToast!: WarningToastsComponent;
+
   replaceForm = this.form.group({
     name: [
       '',
@@ -76,15 +89,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     email: ['', [Validators.required, Validators.email]],
     oldPassword: [
       '',
-      [Validators.required, Validators.minLength(6), Validators.maxLength(30)],
+      [Validators.required, Validators.minLength(4), Validators.maxLength(30)],
     ],
     newPassword: [
       '',
-      [Validators.required, Validators.minLength(6), Validators.maxLength(30)],
+      [Validators.required, Validators.minLength(4), Validators.maxLength(30)],
     ],
     confirmPassword: [
       '',
-      [Validators.required, Validators.minLength(6), Validators.maxLength(30)],
+      [Validators.required, Validators.minLength(4), Validators.maxLength(30)],
     ],
   });
 
@@ -110,8 +123,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
                           next: (response: ResponseInterface) => {
                             if (response.response[0]) {
                               this.leaguesArr.push(response.response[0]);
-                              console.log(response.response[0]);
                             }
+                          },
+                          error: (err) => {
+                            this.errorServices.errorHandlerUser(
+                              err,
+                              this.errorToast,
+                            );
                           },
                         });
                     });
@@ -119,6 +137,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
                       this.errorMessage = 'You dont have liked leagues';
                     }
                   }
+                },
+                error: (err) => {
+                  this.errorServices.errorHandlerUser(err, this.errorToast);
                 },
               });
             return;
@@ -158,6 +179,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
                         alert('Email Changed Successfully');
                       }
                     },
+                    error: (err) => {
+                      this.errorServices.errorHandlerUser(err, this.errorToast);
+                    },
                   });
                 return;
               }
@@ -168,7 +192,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
-          console.log('worked', err);
+          this.errorServices.errorHandlerUser(err, this.errorToast);
         },
       });
   }
@@ -187,6 +211,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.user = response;
                 alert('Name Changed Successfully');
               }
+            },
+            error: (err) => {
+              this.errorServices.errorHandlerUser(err, this.errorToast);
             },
           });
         return;
@@ -211,6 +238,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.user = response;
                 alert('Surname Changed Successfully');
               }
+            },
+            error: (err) => {
+              this.errorServices.errorHandlerUser(err, this.errorToast);
             },
           });
         return;
@@ -244,6 +274,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     this.user = response;
                     alert('Password Changed Successfully');
                   }
+                },
+                error: (err) => {
+                  this.errorServices.errorHandlerUser(err, this.errorToast);
                 },
               });
             return;
@@ -281,6 +314,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 next: (response: ResponseInterface) => {
                   this.coachesArr.push(response.response[0]);
                 },
+                error: (err) => {
+                  this.errorServices.errorHandlerUser(err, this.errorToast);
+                },
               });
           });
         }
@@ -300,6 +336,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
               .subscribe({
                 next: (response: ResponseInterface) => {
                   this.teamsArr.push(response.response[0]);
+                },
+                error: (err) => {
+                  this.errorServices.errorHandlerUser(err, this.errorToast);
                 },
               });
           });
@@ -321,6 +360,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 next: (response: ResponseInterface) => {
                   this.venuesArr.push(response.response[0]);
                 },
+                error: (err) => {
+                  this.errorServices.errorHandlerUser(err, this.errorToast);
+                },
               });
           });
         }
@@ -341,6 +383,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 .subscribe({
                   next: (response: ResponseInterface) => {
                     this.playersArr.push(response.response[0]);
+                  },
+                  error: (err) => {
+                    this.errorServices.errorHandlerUser(err, this.errorToast);
                   },
                 });
             },
@@ -419,7 +464,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.savedServices
           .updateUserSaved(this.savesArr.id, this.savesArr)
           .pipe(takeUntil(this.destroyRef))
-          .subscribe();
+          .subscribe({
+            error: (err) => {
+              this.errorServices.errorHandlerUser(err, this.errorToast);
+            },
+          });
       }
     }
   }

@@ -4,19 +4,26 @@ import {
   input,
   OnDestroy,
   OnInit,
+  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { MenuComponent } from '../../layouts/menu/menu.component';
 import { LeaguesService } from '../../services/leagues.service';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { LeaguesInterface, UserInterface } from '../../models/interface';
+import {
+  LeaguesInterface,
+  ResponseInterface,
+  UserInterface,
+} from '../../models/interface';
 import { LeaguesModalComponent } from '../../layouts/leagues-modal/leagues-modal.component';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { Subject, takeUntil } from 'rxjs';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { SaveButtonComponent } from '../../layouts/save-button/save-button.component';
+import { ErrorToastsComponent } from '../../layouts/error-toasts/error-toasts.component';
+import { WarningToastsComponent } from '../../layouts/warning-toasts/warning-toasts.component';
 @Component({
   selector: 'app-leagues',
   standalone: true,
@@ -26,6 +33,8 @@ import { SaveButtonComponent } from '../../layouts/save-button/save-button.compo
     NgxPaginationModule,
     LeaguesModalComponent,
     SaveButtonComponent,
+    ErrorToastsComponent,
+    WarningToastsComponent,
   ],
   templateUrl: './leagues.component.html',
   styleUrl: './leagues.component.css',
@@ -37,11 +46,15 @@ export class LeaguesComponent implements OnInit, OnDestroy {
   navigate = inject(Router);
 
   leaguesArray: LeaguesInterface[] = [];
+  errorMessageLeagues = '';
   league: LeaguesInterface | undefined = undefined;
   destroyRef = new Subject<void>();
   userData: UserInterface | null = null;
 
   @ViewChildren(LeaguesModalComponent) modal!: LeaguesModalComponent;
+  @ViewChild('error') errorToast!: ErrorToastsComponent;
+  @ViewChild('warning') warningToast!: WarningToastsComponent;
+
   leagues = input<LeaguesInterface | null>(null);
   page: any;
 
@@ -52,18 +65,7 @@ export class LeaguesComponent implements OnInit, OnDestroy {
         next: (el: UserInterface | null) => {
           if (el) {
             this.userData = el;
-            this.leaguesServices
-              .getLeagues()
-              .pipe(takeUntil(this.destroyRef))
-              .subscribe({
-                next: (res: any) => {
-                  this.leaguesArray = res.response;
-                },
-                error: (err: any) => {
-                  console.error('Something went wrong:', err);
-                  this.errorServices.errorHandleProfile(err);
-                },
-              });
+            this.getLeagues();
             return;
           }
           this.navigate.navigateByUrl('/login');
@@ -74,6 +76,30 @@ export class LeaguesComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyRef.next();
     this.destroyRef.complete();
+  }
+
+  getLeagues() {
+    this.leaguesServices
+      .getLeagues()
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (res: ResponseInterface) => {
+          if (res.errors.length) {
+            this.errorServices.warningHandler(
+              'Something went wrong, try again later',
+              this.warningToast,
+            );
+            return;
+          }
+          this.leaguesArray = res.response;
+          if (this.leaguesArray.length == 0)
+            this.errorMessageLeagues = 'Something went wrong';
+        },
+        error: (err: any) => {
+          this.errorServices.errorHandlerUser(err, this.errorToast);
+        },
+      });
+    return;
   }
 
   sortByName(arr: LeaguesInterface[], key: any) {

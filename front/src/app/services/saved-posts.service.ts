@@ -10,11 +10,11 @@ export class SavedPostsService {
   http = inject(HttpClient);
 
   getUsersSavedById(id: string) {
-    return this.http.get<SavesInterface>(`${SAVED_ROOT}/${id}`);
+    return this.http.get<SavesInterface>(`${SAVED_ROOT}${id}`);
   }
 
   updateUserSaved(id: string, obj: any) {
-    return this.http.put(`${SAVED_ROOT}/${id}`, obj);
+    return this.http.put(`${SAVED_ROOT}${id}`, obj);
   }
 
   addUserToSaves(obj: SavesInterface) {

@@ -1,53 +1,55 @@
+<app-error-toasts #error></app-error-toasts>
+<app-warning-toasts #warning></app-warning-toasts>
 <app-header [userId]="userData?.id"></app-header>
-
-
-  <div class="main-players">
-    <div class="d-flex">
-      <div class="box">
-        <h5 class="p-2">Country</h5>
-        <ol class="p-2">
-          @if (countryArr.length) {
-            @for (item of countryArr; track $index) {
-              <li
-                [class]="$index % 2 ? 'odd-backg ' : '' + 'cursor-p p-3'"
-                (click)="getVenues(item.name)"
-              >
-                {{ item.name }}
-              </li>
-            }
-          } @else {
-            <h6 class="text-danger">
-              There is something wrong {{ errorCountryMessage }}
-            </h6>
+<div class="container-xl">
+  <div class="d-lg-flex p-3">
+    <div class="box">
+      <h5 class="p-3">Country</h5>
+      <ul>
+        @if (countryArr.length) {
+          @for (item of countryArr; track $index) {
+            <li
+              [class]="($index%2==0 ? 'bg-light ' : '') + 'cursor-p p-3'"
+              (click)="getVenues(item.name)"
+            >
+              {{ item.name }}
+              <img class="country-img" [src]="item.flag" alt="flag" />
+            </li>
           }
-        </ol>
+        } @else {
+          <h6 class="text-danger p-3">
+            There is something wrong {{ errorCountryMessage }}
+          </h6>
+        }
+      </ul>
+    </div>
+    <div class="w-100 info-box d-flex align-items-end flex-column mb-3">
+      <div class="w-100 d-flex justify-content-between tab-players">
+        <h4>Venues</h4>
+        <h5 class="">{{ countryName ?? "Unselected " }}</h5>
       </div>
-      <div class="w-100 info-box d-flex align-items-end flex-column mb-3">
-        <div class="w-100 d-flex justify-content-between tab-players">
-          <h4>Venues</h4>
-          <h5 class="">{{ countryName ?? "Unselected " }}</h5>
-        </div>
 
+      <div class="overflow-auto w-100">
         <table class="w-100">
           <thead>
-            <tr>
-              <th>Photo</th>
-              <th (click)="sortBy('id')">Id</th>
-              <th (click)="sortBy('name')">Name</th>
-              <th (click)="sortBy('country')">Country</th>
-              <th (click)="sortBy('code')">Capacity</th>
-              <th (click)="sortBy('founded')">Address</th>
-              <th (click)="sortBy('surface')">Surface</th>
-              <th (click)="sortBy('venue-city')">City</th>
-            </tr>
+          <tr>
+            <th>Photo</th>
+            <th (click)="sortBy('id')">Id</th>
+            <th (click)="sortBy('name')">Name</th>
+            <th (click)="sortBy('country')">Country</th>
+            <th (click)="sortBy('code')">Capacity</th>
+            <th (click)="sortBy('founded')">Address</th>
+            <th (click)="sortBy('surface')">Surface</th>
+            <th (click)="sortBy('venue-city')">City</th>
+          </tr>
           </thead>
           <tbody>
             @if (venuesArr.length) {
               @for (
-                item of venuesArr
-                  | paginate: { itemsPerPage: 20, currentPage: page };
+                  item of venuesArr
+                | paginate: { itemsPerPage: 20, currentPage: page };
                 track $index
-              ) {
+                ) {
                 <tr
                   [attr.data-bs-target]="'#modal'"
                   data-bs-toggle="modal"
@@ -62,24 +64,31 @@
                   <td>{{ item.address }}</td>
                   <td>{{ item.surface }}</td>
                   <td>{{ item.city }}</td>
-                  <app-save-button [idCategory]="item.id+''" [category]="'venues'" [userName]="userData?.id"></app-save-button>
-
+                  <td>
+                    <app-save-button
+                      [idCategory]="item.id + ''"
+                      [category]="'venues'"
+                      [userName]="userData?.id"
+                    ></app-save-button>
+                  </td>
                 </tr>
               }
             }
           </tbody>
         </table>
-        @if (!venuesArr.length && !errorVenuesMessage) {
-          <h4 class="text-danger text-center p-3">
-            Something Went Wrong {{ errorVenuesMessage }}
-          </h4>
-        }
-        <div class="p-3 mt-auto">
-          <pagination-controls
-            (pageChange)="page = $event"
-          ></pagination-controls>
-        </div>
-        <app-venue-modal [venue]="venue" [userId]="userData?.id"></app-venue-modal>
       </div>
+      @if (!venuesArr.length && !errorVenuesMessage) {
+        <h4 class="text-danger text-center p-3">
+          Something Went Wrong {{ errorVenuesMessage }}
+        </h4>
+      }
+      <div class="p-3 mt-auto">
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+      </div>
+      <app-venue-modal
+        [venue]="venue"
+        [userId]="userData?.id"
+      ></app-venue-modal>
     </div>
   </div>
+</div>

@@ -1,103 +1,113 @@
+<app-error-toasts #error></app-error-toasts>
+<app-warning-toasts #warning></app-warning-toasts>
 <app-header [userId]="userData?.id"></app-header>
-<div class="main-players">
-  <div class="d-flex w-100 justify-content-center flex-column">
-    <div class="d-flex">
-      <div>
-        <div class="box">
-          <h4 class="p-3">Country</h4>
-          @if (countryErrorMessage) {
-            <p class="text-danger">{{ countryErrorMessage }}</p>
-          }
-          @if (!countryArr) {
-            <p class="text-danger">There are no Country</p>
-          }
-          <ol>
-            @for (item of countryArr; track $index) {
-              <li (click)="setCountry(item.name)">
-                {{ item.name }}
-                <img
-                  class="cursor-p"
-                  [src]="item.flag"
-                  alt="flag"
-                  [class]="'country-img'"
-                />
-              </li>
+<div class="main-players p-5">
+  <div class="container-xl">
+    <div class="d-flex w-100 justify-content-center flex-column">
+      <div class="d-lg-flex ">
+        <div class="d-lg-block d-flex ">
+          <div class="box pt">
+            <h4 class="p-3">Country</h4>
+            @if (countryErrorMessage) {
+              <h5 class="text-danger p-2">{{ countryErrorMessage }}</h5>
             }
-          </ol>
-        </div>
-        <div class="box">
-          <h4 class="p-3">Teams</h4>
-          @if (teamErrorMessage) {
-            <p class="text-danger">{{ teamErrorMessage }}</p>
-          }
-          @if (!teamsArr) {
-            <p class="text-danger">Select a country First</p>
-          }
-          <ol>
-            @for (item of teamsArr; track $index) {
-              <li (click)="setTeam(item.team.id)">
-                {{ item.team.name }}
-                <img
-                  class="cursor-p"
-                  [src]="item.team.logo"
-                  alt="flag"
-                  [class]="'country-img'"
-                />
-                {{ item.team.id }}
-              </li>
+            <ul>
+              @for (item of countryArr; track $index) {
+                <li
+                  [class]="
+                    ($index % 2 == 0 ? 'bg-light' : '') +
+                    ' cursor-p p-3 pt-2 pb-2 '
+                  "
+                  (click)="setCountry(item.name)"
+                >
+                  {{ item.name }}
+                  <img class="country-img" [src]="item.flag" alt="flag" />
+                </li>
+              }
+            </ul>
+          </div>
+          <div class="box">
+            <h4 class="p-3">Teams</h4>
+            @if (teamErrorMessage) {
+              <h5 class="text-danger p-2">{{ teamErrorMessage }}</h5>
             }
-          </ol>
-        </div>
-      </div>
-      <div class="info-box w-100 d-flex align-items-end flex-column mb-3">
-        <div
-          class="d-flex justify-content-between align-items-center tab-players w-100"
-        >
-          <h4>Coaches</h4>
-          <div class="d-flex align-items-center">
-            <h5 class="">{{ countryName ?? "Unselected " }}</h5>
-            <h5 class="p-3">/</h5>
-            <h5 class="">{{ teamName ?? "Unselected " }}</h5>
+            <ul>
+              @for (item of teamsArr; track $index) {
+                <li
+                  [class]="
+                    ($index % 2 == 0 ? 'bg-light' : '') +
+                    ' cursor-p p-3 pt-2 pb-2 '
+                  "
+                  (click)="setTeam(item.team.id)"
+                >
+                  {{ item.team.name }}
+                  <img class="logo" [src]="item.team.logo" alt="flag" />
+                  {{ item.team.id }}
+                </li>
+              }
+            </ul>
           </div>
         </div>
-        <table class="w-100">
-          <thead>
-            <tr>
-              <td>Photo</td>
-              <td>Id</td>
-              <td>Name</td>
-              <td>Age</td>
-              <td>Team</td>
-              <td>Birth</td>
-            </tr>
-          </thead>
-          <tbody>
-            @if (couchesArr.length) {
-              @for (
-                item of couchesArr
-                  | paginate: { itemsPerPage: 20, currentPage: page };
-                track $index
-              ) {
-                <tr [class]="$index % 2 ? 'odd-backg' : ''" [routerLink]="'/coach/' +[item?.id]">
-                  <td><img [src]="item?.photo" alt="photo" /></td>
-                  <td>{{ item?.id }}</td>
-                  <td>{{ item?.name }}</td>
-                  <td>{{ item?.age }}</td>
-                  <td>{{ item?.team?.name }}</td>
-                  <td>{{ item?.birth?.date }}</td>
-                  <app-save-button
-                    [idCategory]="item.id + ''"
-                    [category]="'coaches'"
-                    [userName]="userData?.id"
-                  ></app-save-button>
-                </tr>
-              }
-            }
-          </tbody>
-          <pagination-controls
-            (pageChange)="page = $event"
-          ></pagination-controls>
-        </table>
+        <div class="info-box w-100 d-flex align-items-end flex-column mb-3">
+          <div
+            class="d-flex justify-content-between align-items-center tab-players w-100"
+          >
+            <h4>Coaches</h4>
+            <div class="d-flex align-items-center">
+              <h5 class="">{{ countryName ?? "Unselected " }}</h5>
+              <h5 class="p-3">/</h5>
+              <h5 class="">{{ teamName ?? "Unselected " }}</h5>
+            </div>
+          </div>
+          <div class="overflow-auto w-100">
+            <table class="w-100">
+              <thead >
+              <tr>
+                <td>Photo</td>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Age</td>
+                <td>Team</td>
+                <td>Birth</td>
+                <td>Save</td>
+              </tr>
+              </thead>
+              <tbody>
+                @if (couchesArr.length) {
+                  @for (
+                      item of couchesArr
+                    | paginate: { itemsPerPage: 20, currentPage: page };
+                    track $index
+                    ) {
+                    <tr [class]="($index % 2 ? 'odd-backg' : '') + ' cursor-p'">
+                      <td [routerLink]="'/coaches/' + [item?.id]">
+                        <img [src]="item?.photo" alt="photo" />
+                      </td>
+                      <td>{{ item?.id }}</td>
+                      <td>{{ item?.name }}</td>
+                      <td>{{ item?.age }}</td>
+                      <td>{{ item?.team?.name }}</td>
+                      <td>{{ item?.birth?.date }}</td>
+                      <td>
+                        <app-save-button
+                          [idCategory]="item.id + ''"
+                          [category]="'coaches'"
+                          [userName]="userData?.id"
+                        ></app-save-button>
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+          <h4 class="text-danger p-3">{{ couchErrorMessage }}</h4>
+          <div class="mt-auto p-4">
+            <pagination-controls
+              (pageChange)="page = $event"
+            ></pagination-controls>
+          </div>
+        </div>
       </div>
     </div>
   </div>

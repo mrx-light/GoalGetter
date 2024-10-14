@@ -1,61 +1,67 @@
-  <app-header [userId]="userData?.id"></app-header>
-    <div class="leagues-main">
-      <div class="d-flex w-100 justify-content-center flex-column">
+<app-error-toasts #error></app-error-toasts>
+<app-warning-toasts #warning></app-warning-toasts>
+<app-header [userId]="userData?.id"></app-header>
 
-      <div class="league-header">Football Leagues</div>
-      <div class="league_container">
-        <table class="w-100" style="border-collapse: collapse">
-          <thead class="w-100">
-          <tr class="cursor-p">
-            <th (click)="sortByName(leaguesArray, 'id')">League Id</th>
-            <th (click)="sortByName(leaguesArray, 'country')">Country</th>
-            <th (click)="sortByName(leaguesArray, 'name')" class="">Name</th>
-            <th (click)="sortByName(leaguesArray, 'season')">Season</th>
-            <th (click)="sortByName(leaguesArray, 'start')">Start</th>
-            <th (click)="sortByName(leaguesArray, 'end')">End</th>
-            <th (click)="sortByName(leaguesArray, 'current')">Current</th>
+<div class="container-xl">
+  <div class="league-header">Football Leagues</div>
+  <div class="league_container overflow-auto">
+    <table class="w-100" style="border-collapse: collapse">
+      <thead class="w-100">
+        <tr class="cursor-p">
+          <th (click)="sortByName(leaguesArray, 'id')">League Id</th>
+          <th (click)="sortByName(leaguesArray, 'country')">Country</th>
+          <th (click)="sortByName(leaguesArray, 'name')" class="">Name</th>
+          <th (click)="sortByName(leaguesArray, 'season')">Season</th>
+          <th (click)="sortByName(leaguesArray, 'start')">Start</th>
+          <th (click)="sortByName(leaguesArray, 'end')">End</th>
+          <th (click)="sortByName(leaguesArray, 'current')">Current</th>
+          <th>Save</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (
+          item of leaguesArray
+            | paginate: { itemsPerPage: 20, currentPage: page };
+          track $index
+        ) {
+          <tr
+            class="cursor-p"
+            (click)="passDataToModal(item)"
+            data-bs-toggle="modal"
+            [attr.data-bs-target]="'#modal'"
+            [class]="$index % 2 == 0 ? 'odd-backg' : ''"
+          >
+            <td>{{ item.league.id }}</td>
+            <td>
+              <img [src]="item.country.flag" class="img-flag" alt="flag" />{{
+                item.country.name
+              }}
+            </td>
+            <td>
+              <img [src]="item.league.logo" class="img-name" alt="flag" />{{
+                item.league.name
+              }}
+            </td>
+            <td>{{ item?.seasons?.[0]?.year }}</td>
+            <td>{{ item?.seasons?.[0]?.start }}</td>
+            <td>{{ item?.seasons?.[0]?.end }}</td>
+            <td>{{ item?.seasons?.[0]?.current }}</td>
+            <td>
+              <app-save-button
+                [idCategory]="item.league.id + ''"
+                [category]="'leagues'"
+                [userName]="userData?.id"
+              ></app-save-button>
+            </td>
           </tr>
-          </thead>
-          <tbody>
-            @for (
-                item of leaguesArray
-              | paginate: { itemsPerPage: 20, currentPage: page };
-              track $index
-              ) {
-              <tr
-                class="cursor-p"
-                (click)="passDataToModal(item)"
-                data-bs-toggle="modal"
-                [attr.data-bs-target]="'#modal'"
-                [class]="$index % 2 == 0 ? 'odd-backg' : ''"
-              >
-                <td>{{ item.league.id }}</td>
-                <td>
-                  <img [src]="item.country.flag" class="img-flag" alt="flag"/>{{
-                    item.country.name
-                  }}
-                </td>
-                <td>
-                  <img [src]="item.league.logo" class="img-name" alt="flag"/>{{
-                    item.league.name
-                  }}
-                </td>
-
-                <td>{{item?.seasons?.[0]?.year }}</td>
-                <td>{{ item?.seasons?.[0]?.start }}</td>
-                <td>{{ item?.seasons?.[0]?.end }}</td>
-                <td>{{ item?.seasons?.[0]?.current }}</td>
-                <app-save-button [idCategory]="item.league.id+''" [category]="'leagues'" [userName]="userData?.id"></app-save-button>
-
-              </tr>
-            }
-          </tbody>
-        </table>
-        <br />
-        <pagination-controls (pageChange)="page = $event"></pagination-controls>
-      </div>
-    </div>
-
+        }
+      </tbody>
+    </table>
+    <br />
+    <pagination-controls (pageChange)="page = $event"></pagination-controls>
   </div>
-  <app-leagues-modal [leagueInfo]="league" [userId]="userData?.id"></app-leagues-modal>
-
+</div>
+<app-leagues-modal
+  [leagueInfo]="league"
+  [userId]="userData?.id"
+></app-leagues-modal>

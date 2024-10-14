@@ -1,24 +1,38 @@
+<app-error-toasts #error></app-error-toasts>
+<app-warning-toasts #warning></app-warning-toasts>
 <app-header [userId]="userData?.id"></app-header>
-<div class="main-players w-100">
-  <div class="">
-    <div class="d-flex">
-      <div class="box">
-        <h5 class="p-2">Country</h5>
-        <ol class="p-2">
-          @if(countryArray.length ) {
-            @for(item of countryArray; track $index) {
-              <li [class]="$index%2 ? 'odd-backg ' : '' + 'cursor-p p-3'" (click)="getTeams(item.name)">{{item.name}}</li>
-            }
-          } @else {
-            <h6 class="text-danger">There is something wrong {{errorCountryMessage}}</h6>
+<div class="container-xl w-100">
+  <div class="d-lg-flex p-3">
+    <div class="box">
+      <h5 class="p-3">Country</h5>
+      <ul>
+        @if (countryArray.length) {
+          @for (item of countryArray; track $index) {
+            <li
+              [class]="
+                ($index % 2 == 0 ? 'bg-light' : '') + ' cursor-p p-3 pt-2 pb-2 '
+              "
+              (click)="getTeams(item.name)"
+            >
+              {{ item.name }}
+              <img class="country-img" [src]="item.flag" alt="flag" />
+            </li>
           }
-        </ol>
+        } @else {
+          <h6 class="text-danger p-3">
+            There is something wrong {{ errorCountryMessage }}
+          </h6>
+        }
+      </ul>
+    </div>
+    <div class="info-box w-100 d-flex align-items-end flex-column m-3">
+      <div
+        class="d-flex justify-content-between align-items-center tab-players w-100"
+      >
+        <h4>Teams</h4>
+        <h5 class="">{{ countryName ?? "Unselected" }}</h5>
       </div>
-      <div class="info-box w-100 d-flex align-items-end flex-column mb-3">
-        <div class="d-flex justify-content-between align-items-center tab-players w-100">
-          <h4>Teams</h4>
-          <h5 class="">{{countryName ?? "Unselected"}}</h5>
-        </div>
+      <div class="overflow-auto w-100">
         <table class="w-100">
           <thead>
             <tr>
@@ -33,39 +47,53 @@
               <th (click)="sortBy('venue-capacity')">Capacity</th>
             </tr>
           </thead>
-          <tbody >
-            @if(teamsArr.length) {
-              @for (item of teamsArr | paginate: {itemsPerPage: 20, currentPage: page}; track $index) {
+          <tbody>
+            @if (teamsArr.length) {
+              @for (
+                item of teamsArr
+                  | paginate: { itemsPerPage: 20, currentPage: page };
+                track $index
+              ) {
                 <tr
                   [attr.data-bs-target]="'#modal'"
                   data-bs-toggle="modal"
                   (click)="passDataModal(item)"
-                  [class]="$index%2 ? 'odd-backg ':' ' + 'cursor-p'"
+                  [class]="$index % 2 == 0 ? 'odd-backg ' : ' ' + 'cursor-p'"
                 >
-                  <td>{{item.team.id}}</td>
-                  <td>{{item.team.name}} <img [src]="item.team.logo" alt="logo" class="logo"></td>
-                  <td>{{item.team.country}} </td>
-                  <td>{{item.team.code}}</td>
-                  <td>{{item.team.founded}}</td>
-                  <td>{{item.team.national}}</td>
-                  <td>{{item.venue.surface}}</td>
-                  <td>{{item.venue.city}}</td>
-                  <td>{{item.venue.capacity}}</td>
-                  <app-save-button [idCategory]="item?.team?.id+''" [category]="'teams'" [userName]="userData?.id"></app-save-button>
-
+                  <td>{{ item.team.id }}</td>
+                  <td>
+                    {{ item.team.name }}
+                    <img [src]="item.team.logo" alt="logo" class="logo" />
+                  </td>
+                  <td>{{ item.team.country }}</td>
+                  <td>{{ item.team.code }}</td>
+                  <td>{{ item.team.founded }}</td>
+                  <td>{{ item.team.national }}</td>
+                  <td>{{ item.venue.surface }}</td>
+                  <td>{{ item.venue.city }}</td>
+                  <td>{{ item.venue.capacity }}</td>
+                  <td>
+                    <app-save-button
+                      [idCategory]="item?.team?.id + ''"
+                      [category]="'teams'"
+                      [userName]="userData?.id"
+                    ></app-save-button>
+                  </td>
                 </tr>
               }
             }
           </tbody>
         </table>
-        @if(!teamsArr.length && !errorTeamsMessage) {
-          <h4 class="text-danger text-center p-3">Something Went Wrong {{errorTeamsMessage}}</h4>
-        }
-        <div class="p-3 mt-auto">
-          <pagination-controls (pageChange)="page = $event"></pagination-controls>
-        </div>
       </div>
-      <app-team-modal [teamInfo]="team" [userId]="userData?.id"></app-team-modal>
+      @if (!teamsArr.length && !errorTeamsMessage) {
+        <h4 class="text-danger text-center p-3">
+          Something Went Wrong {{ errorTeamsMessage }}
+        </h4>
+      }
+      <div class="p-3 mt-auto">
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+      </div>
     </div>
+    <app-team-modal [teamInfo]="team" [userId]="userData?.id"></app-team-modal>
   </div>
 </div>

@@ -2,34 +2,10 @@
   "users": [
     {
       "id": "mrx_light",
-      "name": "Malanici",
-      "surname": "Petru",
+      "name": "Petru",
+      "surname": "Malanici",
       "email": "pmalanici@gmail.com",
       "password": "123123",
-      "isActive": true
-    },
-    {
-      "id": "mihaela_111",
-      "name": "Mihaela",
-      "surname": "Macari",
-      "email": "mihaela@gmail.com",
-      "password": "123123",
-      "isActive": true
-    },
-    {
-      "id": "iopta_pavel",
-      "name": "Pavel",
-      "surname": "Ionescu",
-      "email": "iopta@gmail.com",
-      "password": "123123",
-      "isActive": true
-    },
-    {
-      "id": "ursus_543",
-      "name": "Ursus",
-      "surname": "Topa",
-      "email": "ursus@gmail.com",
-      "password": "iopta1",
       "isActive": true
     }
   ],
@@ -37,62 +13,31 @@
     {
       "id": "mrx_light",
       "leagues": [
-        "78",
-        "140"
-      ],
-      "teams": [],
-      "players": [],
-      "coaches": [],
-      "venues": []
-    },
-    {
-      "id": "mihaela_111",
-      "leagues": [],
-      "teams": [],
-      "players": [],
-      "coaches": [],
-      "venues": []
-    },
-    {
-      "id": "iopta_pavel",
-      "leagues": [
-        "21",
-        "71"
+        "94",
+        "180"
       ],
       "teams": [
-        "434",
-        "435"
+        "591",
+        "3342"
       ],
       "players": [
         {
           "season": "2022",
-          "id": "164445"
+          "id": "56052"
         },
         {
           "season": "2022",
-          "id": "125151"
+          "id": "56056"
+        },
+        {
+          "season": "2022",
+          "id": "123539"
         }
       ],
       "coaches": [
-        "12330"
+        "5507",
+        "5633"
       ],
-      "venues": [
-        "2178"
-      ]
-    },
-    {
-      "id": "ursus_543",
-      "leagues": [
-        "71"
-      ],
-      "teams": [],
-      "players": [
-        {
-          "season": "2021",
-          "id": "44689"
-        }
-      ],
-      "coaches": [],
       "venues": []
     }
   ]

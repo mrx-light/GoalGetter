@@ -3,6 +3,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { HeaderComponent } from '../../layouts/header/header.component';
@@ -20,6 +21,9 @@ import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { SaveButtonComponent } from '../../layouts/save-button/save-button.component';
 import { VenuesService } from '../../services/venues.service';
+import { ErrorToastsComponent } from '../../layouts/error-toasts/error-toasts.component';
+import { WarningToastsComponent } from '../../layouts/warning-toasts/warning-toasts.component';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-venues',
@@ -29,11 +33,14 @@ import { VenuesService } from '../../services/venues.service';
     NgxPaginationModule,
     VenueModalComponent,
     SaveButtonComponent,
+    ErrorToastsComponent,
+    WarningToastsComponent,
   ],
   templateUrl: './venues.component.html',
   styleUrl: './venues.component.css',
 })
 export class VenuesComponent implements OnInit, OnDestroy {
+  errorServices = inject(ErrorHandlerService);
   playerServices = inject(PlayersService);
   loginServices = inject(UserService);
   venuesServices = inject(VenuesService);
@@ -51,6 +58,8 @@ export class VenuesComponent implements OnInit, OnDestroy {
   page: any;
 
   @ViewChildren(VenueModalComponent) modal!: VenueModalComponent;
+  @ViewChild('error') errorToast!: ErrorToastsComponent;
+  @ViewChild('warning') warningToast!: WarningToastsComponent;
 
   ngOnInit(): void {
     this.loginServices.getLoggedUser
@@ -60,21 +69,7 @@ export class VenuesComponent implements OnInit, OnDestroy {
           if (el) {
             this.userData = el;
             this.errorCountryMessage = null;
-            this.playerServices
-              .getCountry()
-              .pipe(takeUntil(this.destroyRef))
-              .subscribe({
-                next: (res: ResponseInterface) => {
-                  if (res.errors && res.errors.plan) {
-                    this.errorCountryMessage = res.errors.plan;
-                    return;
-                  }
-                  this.countryArr = res.response;
-                },
-                error: (err) => {
-                  console.log(err);
-                },
-              });
+            this.getCountries();
             return;
           }
           this.navigate.navigateByUrl('/login');
@@ -86,6 +81,30 @@ export class VenuesComponent implements OnInit, OnDestroy {
     this.destroyRef.next();
     this.destroyRef.complete();
   }
+
+  getCountries() {
+    this.playerServices
+      .getCountry()
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (res: ResponseInterface) => {
+          if (res.errors && res.errors.plan) {
+            this.errorServices.warningHandler(
+              'Something went wrong, try again later',
+              this.warningToast,
+            );
+            this.errorCountryMessage = res.errors.plan;
+            return;
+          }
+          this.countryArr = res.response;
+        },
+        error: (err) => {
+          this.errorServices.errorHandlerUser(err, this.errorToast);
+        },
+      });
+    return;
+  }
+
   getVenues(country: string) {
     this.countryName = country;
     this.venuesServices
@@ -94,6 +113,10 @@ export class VenuesComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: ResponseInterface) => {
           if (res.errors && res.errors.plan) {
+            this.errorServices.warningHandler(
+              'Something went wrong, try again later',
+              this.warningToast,
+            );
             this.errorVenuesMessage = res.errors.plan;
             return;
           }
@@ -104,7 +127,7 @@ export class VenuesComponent implements OnInit, OnDestroy {
           this.venuesArr = res.response;
         },
         error: (err) => {
-          console.error(err);
+          this.errorServices.errorHandlerUser(err, this.errorToast);
         },
       });
   }

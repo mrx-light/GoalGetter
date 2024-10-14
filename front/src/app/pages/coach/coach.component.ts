@@ -1,7 +1,7 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { delay, Subject, takeUntil } from 'rxjs';
 import {
   CoachesInterface,
   ResponseInterface,
@@ -10,11 +10,19 @@ import {
 import { UserService } from '../../services/user.service';
 import { SaveButtonComponent } from '../../layouts/save-button/save-button.component';
 import { CoachesService } from '../../services/coaches.service';
+import { ErrorToastsComponent } from '../../layouts/error-toasts/error-toasts.component';
+import { WarningToastsComponent } from '../../layouts/warning-toasts/warning-toasts.component';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-coach',
   standalone: true,
-  imports: [HeaderComponent, SaveButtonComponent],
+  imports: [
+    HeaderComponent,
+    SaveButtonComponent,
+    ErrorToastsComponent,
+    WarningToastsComponent,
+  ],
   templateUrl: './coach.component.html',
   styleUrls: ['./coach.component.css', './../player/player.component.css'],
 })
@@ -23,11 +31,16 @@ export class CoachComponent implements OnInit, OnDestroy {
   navigate = inject(Router);
   loginServices = inject(UserService);
   coachesServices = inject(CoachesService);
+  errorServices = inject(ErrorHandlerService);
 
   destroyRef = new Subject<void>();
   couchId: string | null = null;
   couch: CoachesInterface | null = null;
   userData: UserInterface | null = null;
+
+  @ViewChild('error') errorToast!: ErrorToastsComponent;
+  @ViewChild('warning') warningToast!: WarningToastsComponent;
+
   ngOnInit(): void {
     this.loginServices.getLoggedUser
       .pipe(takeUntil(this.destroyRef))
@@ -55,17 +68,27 @@ export class CoachComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (response: ResponseInterface) => {
             if (response.errors && response.errors.plan) {
-              this.navigate.navigateByUrl('/coaches');
+              this.errorServices
+                .warningHandler(response.errors.plan, this.warningToast)
+                .pipe(delay(3000))
+                .subscribe(() => {
+                  this.navigate.navigateByUrl('/coaches');
+                });
               return;
             }
             if (!response.response.length) {
-              this.navigate.navigateByUrl('/coaches');
+              this.errorServices
+                .warningHandler('We could not get the coach', this.warningToast)
+                .pipe(delay(3000))
+                .subscribe(() => {
+                  this.navigate.navigateByUrl('/coaches');
+                });
               return;
             }
             this.couch = response.response[0];
           },
           error: (err) => {
-            console.log('error', err);
+            this.errorServices.errorHandlerUser(err, this.errorToast);
           },
         });
       return;

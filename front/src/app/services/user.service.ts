@@ -17,7 +17,7 @@ export class UserService {
     this.userLogged.next(obj);
   }
   getUserByEmail(user: string) {
-    return this.http.get<UserInterface>(USER_ROOT + `?email=${user}`);
+    return this.http.get<UserInterface[]>(USER_ROOT + `?email=${user}`);
   }
   updateUser(obj: UserInterface, id: string) {
     return this.http.put(this.loginRoot + `/${id}`, obj);
@@ -39,5 +39,8 @@ export class UserService {
     return this.http.get<UserInterface>(USER_ROOT + `${user}`);
   }
 
+  getUserById(id: string) {
+    return this.http.get<UserInterface>(`${USER_ROOT}?id=${id}`);
+  }
   constructor() {}
 }

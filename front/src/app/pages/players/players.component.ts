@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { MenuComponent } from '../../layouts/menu/menu.component';
 import { PlayersService } from '../../services/players.service';
@@ -15,6 +15,9 @@ import { UserService } from '../../services/user.service';
 import { Router, RouterLink } from '@angular/router';
 import { SaveButtonComponent } from '../../layouts/save-button/save-button.component';
 import { TeamsService } from '../../services/teams.service';
+import { ErrorToastsComponent } from '../../layouts/error-toasts/error-toasts.component';
+import { WarningToastsComponent } from '../../layouts/warning-toasts/warning-toasts.component';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-players',
@@ -25,11 +28,14 @@ import { TeamsService } from '../../services/teams.service';
     NgxPaginationModule,
     SaveButtonComponent,
     RouterLink,
+    ErrorToastsComponent,
+    WarningToastsComponent,
   ],
   templateUrl: './players.component.html',
   styleUrl: './players.component.css',
 })
 export class PlayersComponent implements OnInit, OnDestroy {
+  errorServices = inject(ErrorHandlerService);
   playersServices = inject(PlayersService);
   loginServices = inject(UserService);
   navigate = inject(Router);
@@ -39,7 +45,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
   playersArr: PlayerInterface[] = [];
   teamsArr: TeamsInterface[] = [];
   userData: UserInterface | null = null;
-  seasonsArr: number[] | undefined = undefined;
+  seasonsArr: number[] = [];
 
   countryName: undefined | string = undefined;
   year: undefined | string = undefined;
@@ -49,8 +55,11 @@ export class PlayersComponent implements OnInit, OnDestroy {
   seasonErrorMessage: string | undefined = undefined;
   teamErrorMessage: string | undefined = undefined;
 
-  page: any;
   destroyRef = new Subject<void>();
+  page: any;
+
+  @ViewChild('error') errorToast!: ErrorToastsComponent;
+  @ViewChild('warning') warningToast!: WarningToastsComponent;
 
   ngOnInit(): void {
     this.loginServices.getLoggedUser
@@ -59,43 +68,52 @@ export class PlayersComponent implements OnInit, OnDestroy {
         next: (el: UserInterface | null) => {
           if (el) {
             this.userData = el;
-            this.playersServices
-              .getCountry()
-              .pipe(takeUntil(this.destroyRef))
-              .subscribe({
-                next: (res: ResponseInterface) => {
-                  if (res.errors.plan) {
-                    this.countryErrorMessage = res.errors.plan;
-                    console.log(res.errors.plan);
-                    return;
-                  }
-                  this.countryArr = res.response;
-                },
-                error: (err) => {
-                  console.error(err);
-                },
-              });
-            this.playersServices
-              .getSeasons()
-              .pipe(takeUntil(this.destroyRef))
-              .subscribe({
-                next: (res: ResponseInterface) => {
-                  if (res.errors.plan) {
-                    this.seasonErrorMessage = res.errors.plan;
-                    console.log(res.errors.plan);
-                    return;
-                  }
-                  this.seasonsArr = res.response;
-                },
-                error: (err) => {
-                  console.error(err);
-                },
-              });
+            this.getCountriesSeasons();
+
             return;
           }
           this.navigate.navigateByUrl('/login');
         },
       });
+  }
+
+  getCountriesSeasons() {
+    this.playersServices
+      .getCountry()
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (res: ResponseInterface) => {
+          if (res.errors && res.errors.plan) {
+            this.countryErrorMessage = res.errors.plan;
+            this.errorServices.warningHandler(' ', this.warningToast);
+            return;
+          }
+          this.countryArr = res.response;
+        },
+        error: (err) => {
+          this.errorServices.errorHandlerUser(err, this.errorToast);
+        },
+      });
+    this.playersServices
+      .getSeasons()
+      .pipe(takeUntil(this.destroyRef))
+      .subscribe({
+        next: (res: ResponseInterface) => {
+          if (res.errors && res.errors.plan) {
+            this.seasonErrorMessage = res.errors.plan;
+            this.errorServices.warningHandler(
+              'Something went wrong, try again later',
+              this.warningToast,
+            );
+            return;
+          }
+          this.seasonsArr = res.response;
+        },
+        error: (err) => {
+          this.errorServices.errorHandlerUser(err, this.errorToast);
+        },
+      });
+    return;
   }
 
   ngOnDestroy(): void {
@@ -110,15 +128,18 @@ export class PlayersComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyRef))
       .subscribe({
         next: (res: ResponseInterface) => {
-          if (res.errors.plan) {
+          if (res.errors && res.errors.plan) {
             this.teamErrorMessage = res.errors.plan;
-            console.log(res.errors.plan);
+            this.errorServices.warningHandler(
+              'Something went wrong, try again later',
+              this.warningToast,
+            );
             return;
           }
           this.teamsArr = res.response;
         },
         error: (err) => {
-          console.error(err);
+          this.errorServices.errorHandlerUser(err, this.errorToast);
         },
       });
   }
@@ -161,15 +182,18 @@ export class PlayersComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroyRef))
         .subscribe({
           next: (res: ResponseInterface) => {
-            if (res.errors.plan) {
+            if (res.errors.length && res.errors.plan) {
               this.playerErrorMessage = res.errors.plan;
-              console.log(res.errors.plan);
+              this.errorServices.warningHandler(
+                'Something went wrong, try again later',
+                this.warningToast,
+              );
               return;
             }
             this.playersArr = res.response;
           },
           error: (err) => {
-            console.error('Something went wrong', err);
+            this.errorServices.errorHandlerUser(err, this.errorToast);
           },
         });
     }
