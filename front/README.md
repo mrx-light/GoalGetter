@@ -1,27 +1,58 @@
+
+# How to start the server 
+
+First of all go to folder `./back` and run this command `npx json-server db.json`  
+If everything was done correct then when you go to this url `http://localhost:3000/` you should see a server
+
+### This server is not a real server with all functionalities
+
+It's just a copy, a mocking server. 
+
 # Front
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.4.
+In terminal go to this path `./front` and run this line `ng serve`
 
-## Development server
+# Before you try to use this website!
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+I should warn you that this website is using an API that is limited. It has only 100 request per day and only `get ` requests. 
+So be very accurate with what you want to ,(To be fair you can in 5-10 min to use all those request, After that you need to wait another day to properly use the website again)
 
-## Code scaffolding
+Most of the request will not work because I don't have premium. Example: get players from a season in 1998. it will not work
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+# Do not introduce your real data
 
-## Build
+Even if I can't see that, but don't do that
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+# Pages
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### 1.Login 
+Set user and Log in
 
-## Running end-to-end tests
+### 2.Registration 
+Register user and create an object saved for a user
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### 3.Main 
+A glance of what you can find in this website
+### 4.Leagues 
+All leagues and a modal with all about one league
 
-## Further help
+### 5.Teams 
+All teams and a modal with all about one team
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### 6.Venues 
+All venues and a modal with all about one venue
+
+### 7.Players
+All players
+
+### 8.Players/by id
+All about one player
+### 9.Coaches 
+All coaches
+### 9.Coaches/by id 
+All about one coach
+### 10.Profile
+Here you can remove liked leagues, teams...and all, You can here change name , email password , but not username, you cant do that because you cant change the id in server. 
+
+

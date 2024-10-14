@@ -65,6 +65,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   alreadyCalledTeams: boolean = false;
   alreadyCalledPlayers: boolean = false;
   alreadyCalledVenues: boolean = false;
+  alreadyCalledLeagues: boolean = false;
 
   destroyRef = new Subject<void>();
   savesArr: SavesInterface | {} = {};
@@ -122,8 +123,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
                         .subscribe({
                           next: (response: ResponseInterface) => {
                             if (response.response[0]) {
+                              this.alreadyCalledLeagues = true;
                               this.leaguesArr.push(response.response[0]);
+                              return;
                             }
+                            this.errorMessage = 'Something went wrong';
+                            return;
                           },
                           error: (err) => {
                             this.errorServices.errorHandlerUser(
@@ -312,7 +317,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
               .pipe(takeUntil(this.destroyRef))
               .subscribe({
                 next: (response: ResponseInterface) => {
-                  this.coachesArr.push(response.response[0]);
+                  if (response.response[0]) {
+                    this.coachesArr.push(response.response[0]);
+                    return;
+                  }
+                  this.errorMessage = 'Something went wrong';
+                  return;
                 },
                 error: (err) => {
                   this.errorServices.errorHandlerUser(err, this.errorToast);
@@ -320,6 +330,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
               });
           });
         }
+        this.errorMessage = 'Something went wrong';
         return;
       }
       this.errorMessage = 'You dont have liked coaches';
@@ -335,7 +346,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
               .pipe(takeUntil(this.destroyRef))
               .subscribe({
                 next: (response: ResponseInterface) => {
-                  this.teamsArr.push(response.response[0]);
+                  if (response.response[0]) {
+                    this.teamsArr.push(response.response[0]);
+                    return;
+                  }
+                  this.errorMessage = 'Something went wrong';
+                  return;
                 },
                 error: (err) => {
                   this.errorServices.errorHandlerUser(err, this.errorToast);
@@ -343,6 +359,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
               });
           });
         }
+        this.errorMessage = 'Something went wrong';
         return;
       }
       this.errorMessage = 'You dont have liked teams';
@@ -358,7 +375,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
               .pipe(takeUntil(this.destroyRef))
               .subscribe({
                 next: (response: ResponseInterface) => {
-                  this.venuesArr.push(response.response[0]);
+                  if (response.response[0]) {
+                    this.venuesArr.push(response.response[0]);
+                    return;
+                  }
+                  this.errorMessage = 'Something went wrong';
+                  return;
                 },
                 error: (err) => {
                   this.errorServices.errorHandlerUser(err, this.errorToast);
@@ -366,6 +388,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
               });
           });
         }
+        this.errorMessage = 'Something went wrong';
         return;
       }
       this.errorMessage = 'You dont have liked venues';
@@ -382,7 +405,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroyRef))
                 .subscribe({
                   next: (response: ResponseInterface) => {
-                    this.playersArr.push(response.response[0]);
+                    if (response.response[0]) {
+                      this.playersArr.push(response.response[0]);
+                      return;
+                    }
+                    this.errorMessage = 'Something went wrong';
+                    return;
                   },
                   error: (err) => {
                     this.errorServices.errorHandlerUser(err, this.errorToast);
@@ -391,16 +419,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
             },
           );
         }
+        this.errorMessage = 'Something went wrong';
         return;
       }
       this.errorMessage = 'You dont have liked players';
       return;
     }
-    if (
-      val === 'leagues' &&
-      'leagues' in this.savesArr &&
-      !this.savesArr.leagues.length
-    ) {
+    if (val === 'leagues') {
+      if ('leagues' in this.savesArr && this.savesArr.leagues.length) {
+        this.errorMessage = 'Something went wrong';
+        return;
+      }
       this.errorMessage = 'You dont have liked leagues';
       return;
     }
