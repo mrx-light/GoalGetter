@@ -1,0 +1,11 @@
+<div class="card" style="width: 15rem; height: 20rem">
+  <div class="card-body">
+    <h5 class="card-title">Team: {{teams()?.team?.name}}</h5>
+    <img [src]="teams()?.team?.logo" [alt]="teams()?.team?.code" class="img-team">
+    <p class="card-text-profile">Country: {{teams()?.team?.country}}</p>
+    <p class="card-text-profile">Founded: {{teams()?.team?.founded}}</p>
+    <p class="card-text-profile">National: {{teams()?.team?.national}}</p>
+    <p class="card-text-profile">Venue: {{teams()?.venue?.name}}</p>
+    <a href="#" class="btn btn-primary">See more</a>
+  </div>
+</div>

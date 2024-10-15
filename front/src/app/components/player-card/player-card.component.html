@@ -1,0 +1,26 @@
+<div class="card" style="width: 15rem; height: 30rem">
+  <div class="card-body">
+    <div class="img-player">
+      <img
+        [src]="player()?.player?.photo"
+        class="img-player"
+        alt="player Photo"
+      />
+    </div>
+    <h5 class="card-title">Name: {{ player()?.player?.name }}</h5>
+    <p class="card-text-player">Birth: {{ player()?.player?.birth?.date }}</p>
+    <p class="card-text-player">
+      Goals:
+      {{ player()?.statistics?.[0]?.goals?.total  || "Undefined" }}
+    </p>
+    <p class="card-text-player">
+      Team:
+      {{ player()?.statistics?.[0]?.team?.name  || "Undefined"}}
+    </p>
+    <p class="card-text-player">Height: {{ player()?.player?.height }}</p>
+    <p class="card-text-player">Weight: {{ player()?.player?.weight }}</p>
+    <p class="card-text-player">Injured: {{ player()?.player?.injured }}</p>
+
+    <a href="#" class="btn btn-primary">See More</a>
+  </div>
+</div>

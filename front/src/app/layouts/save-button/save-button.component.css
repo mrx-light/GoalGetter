@@ -1,0 +1,10 @@
+.save {
+  text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+  transition: color .2s;
+}
+
+.save:hover {
+color: red;
+  cursor: pointer;
+}
+

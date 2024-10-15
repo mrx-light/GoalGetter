@@ -1,0 +1,15 @@
+<div class="card" style="width: 15rem; height: 21rem">
+  <div class="card-body">
+    <h5 class="card-title">Name: {{coach()?.name}}</h5>
+    <img [src]="coach()?.photo" alt="photo" class="coach-img">
+    <p class="card-text-profile">Age: {{coach()?.age}}</p>
+    <p class="card-text-profile">Birth: {{coach()?.birth?.date ?? " Undefined" }}</p>
+    <div class="d-flex">
+      <p class="card-text-profile">Team: {{coach()?.team?.name ?? "Undefined"}}</p>
+      <img [src]="coach()?.team?.logo" alt="logo" class="coach-logo">
+    </div>
+    <p class="card-text-profile">Weight:{{coach()?.weight ?? 'Undefined'}}</p>
+    <p class="card-text-profile">Height:{{coach()?.height ?? 'Undefined'}}</p>
+    <a href="#" class="btn btn-primary">See More</a>
+  </div>
+</div>

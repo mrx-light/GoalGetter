@@ -1,0 +1,154 @@
+<app-error-toasts #error></app-error-toasts>
+<app-warning-toasts #warning></app-warning-toasts>
+<app-header [userId]="userData?.id"></app-header>
+<div class="container-xl mt-4">
+  <div class="d-flex justify-content-evenly">
+    <div class="box">
+      <h5 class="p-3">Country's</h5>
+      @if (countryErrorMessage) {
+        <p class="text-danger">{{ countryErrorMessage }}</p>
+      }
+      @if (!countryArr.length) {
+        <p class="text-danger p-3">There are no Country</p>
+      }
+      <ul>
+        @for (item of countryArr; track $index) {
+          <li
+            [class]="
+              ($index % 2 == 0 ? 'bg-light' : '') + ' cursor-p p-3 pt-2 pb-2 '
+            "
+            (click)="setCountry(item.name)"
+          >
+            {{ item.name }}
+            <img [src]="item.flag" alt="flag" [class]="'country-img'" />
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="box">
+      <h5 class="p-3">Seasons</h5>
+      @if (seasonErrorMessage) {
+        <p class="text-danger">{{ seasonErrorMessage }}</p>
+      }
+      @if (!seasonsArr.length) {
+        <p class="text-danger p-3">There are no seasons</p>
+      }
+      <ul>
+        @for (item of seasonsArr; track $index) {
+          <li
+            [class]="
+              ($index % 2 == 0 ? 'bg-light' : '') + ' cursor-p p-3 pt-2 pb-2 '
+            "
+            (click)="setYear(item)"
+          >
+            {{ item }}
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="box">
+      <h5 class="p-3">Teams</h5>
+      @if (teamErrorMessage) {
+        <p class="text-danger p-3">{{ teamErrorMessage }}</p>
+      }
+      @if (!teamsArr.length) {
+        <p class="text-danger p-3">Select a country First</p>
+      }
+      <ul>
+        @for (item of teamsArr; track $index) {
+          <li
+            [class]="
+              ($index % 2 == 0 ? 'bg-light' : '') + ' cursor-p p-3 pt-2 pb-2 '
+            "
+            (click)="setTeam(item.team.id)"
+          >
+            {{ item.team.name }}
+            <img
+              class="cursor-p"
+              [src]="item.team.logo"
+              alt="flag"
+              [class]="'country-img'"
+            />
+            {{ item.team.id }}
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+  <div class="info-box">
+    <div
+      class="d-flex justify-content-between align-items-center tab-players w-100 overflow-auto"
+    >
+      <h5 class="">Players</h5>
+      <div class="d-flex align-items-center">
+        <h6 class="p-3">{{ countryName ?? "Unselected" }}</h6>
+        /
+        <h6 class="p-3">{{ year ?? "Unselected" }}</h6>
+        /
+        <h6 class="p-3">{{ team ?? "Unselected" }}</h6>
+      </div>
+    </div>
+    <div class="overflow-auto">
+      <table class="w-100">
+        <thead class="header-tabs">
+          <tr class="">
+            <th>Photo</th>
+            <th (click)="sortPlayers('id')">Id</th>
+            <th (click)="sortPlayers('name')">Name</th>
+            <th (click)="sortPlayers('age')">Age</th>
+            <th (click)="sortPlayers('weight')">Weight</th>
+            <th (click)="sortPlayers('height')">Height</th>
+            <th (click)="sortPlayers('goals')">Goals</th>
+            <th (click)="sortPlayers('duels')">Duels</th>
+            <th (click)="sortPlayers('yellow-card')">Yellow-Card</th>
+            <th (click)="sortPlayers('red-card')">Red-Card</th>
+            <th>Save</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (playersArr.length) {
+            @for (
+              item of playersArr
+                | paginate: { itemsPerPage: 20, currentPage: page };
+              track $index
+            ) {
+              <tr [class]="$index % 2 ? 'odd-backg' : ''">
+                <td [routerLink]="[item?.player?.id, year]">
+                  <img [src]="item?.player?.photo" [alt]="item?.player?.name" />
+                </td>
+                <td>{{ item?.player?.id }}</td>
+                <td [routerLink]="[item?.player?.id, year]">
+                  {{ item?.player?.name }}
+                </td>
+                <td>{{ item?.player?.age }}</td>
+                <td>{{ item?.player?.weight }}</td>
+                <td>{{ item?.player?.height }}</td>
+                <td>{{ item?.statistics?.[0]?.goals?.total }}</td>
+                <td>{{ item?.statistics?.[0]?.duels?.total }}</td>
+                <td>{{ item?.statistics?.[0]?.cards?.yellow }}</td>
+                <td>{{ item?.statistics?.[0]?.cards?.red }}</td>
+                <td>
+                  <app-save-button
+                    [idCategory]="item?.player?.id + ''"
+                    [category]="'players'"
+                    [userName]="userData?.id"
+                    [seasonCategory]="year"
+                  ></app-save-button>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+      @if (!playersArr.length) {
+        <h4 class="link-danger m-3">There are not such players</h4>
+      }
+      @if (playerErrorMessage) {
+        <h4 class="text-danger">{{ playerErrorMessage }}</h4>
+      }
+      <div class="p-3">
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

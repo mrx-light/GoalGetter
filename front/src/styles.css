@@ -1,0 +1,111 @@
+body {
+  height: 100vh;
+  background-color: #7490b0!important;
+}
+
+.validation {
+  color: red;
+}
+
+.odd-backg {
+  background-color: #e4e6ef;
+}
+
+.content {
+  width: 85%;
+}
+
+.menu {
+  width: 15%;
+  padding: 1rem;
+  background-color: #24231f;
+  color: #d6b531;
+  height: 100%;
+}
+
+
+
+.reg-form {
+  width: 80%;
+  margin-top: 5rem;
+  padding: 2rem;
+  border-radius: 7px;
+
+}
+
+.card-text-profile {
+  margin: 0 0 .5rem ;
+}
+
+.modal-logo {
+  width: 15rem;
+  height: 10rem;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0!important;
+}
+
+.main {
+  height: 88%;
+  overflow: hidden;
+  overflow-y: scroll;
+  background-color: rgba(var(--bs-secondary-bg-rgb));
+}
+
+
+td, th {
+  padding: 1rem 1rem;
+  cursor: pointer;
+}
+.cursor-p {
+  cursor: pointer;
+}
+
+
+.box {
+  background-color: #e4e6ef;
+  margin: 1rem;
+  border: 2px solid white;
+  border-radius: 5px;
+  overflow: hidden;
+  overflow-y: scroll;
+  width: 13rem;
+  height: 30rem;
+}
+
+.info-box {
+  background-color: white;
+  margin: 1rem;
+  padding: 0;
+  border-radius: 7px;
+}
+
+.tab-players {
+  border-radius: 7px 7px 0 0;
+  background-color: #e4e6ef;
+  padding: 1rem;
+}
+
+
+.main-players {
+  background-color: #7490b0;
+  padding-bottom: 1rem;
+}
+
+.country-img {
+  width: 1.5rem;
+  margin-left: .5rem;
+  height: 1rem;
+}
+
+.img-flag {
+  width: 25px;
+  height: 15px;
+}
+
+.img-name {
+  width: 20px;
+  height: 20px;
+}

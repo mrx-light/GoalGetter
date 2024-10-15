@@ -1,0 +1,24 @@
+.league_container {
+  margin: 0 4rem 4rem 4rem;
+  background-color: white;
+  border-radius: 0 0 5px 5px;
+  padding: 1rem;
+}
+
+.league-header {
+  margin: 4rem 4rem 0;
+  background-color: #e4e6ef;
+  padding: 1rem 3rem;
+  border-radius: 5px 5px 0 0;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.leagues-main {
+  overflow: hidden;
+  background-color: #e0d194;
+}
+
+
+
+

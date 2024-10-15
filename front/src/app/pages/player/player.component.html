@@ -1,0 +1,240 @@
+<app-error-toasts #error></app-error-toasts>
+<app-warning-toasts #warning></app-warning-toasts>
+<app-header [userId]="userData?.id"></app-header>
+<div class="d-flex justify-content-center m-4">
+  <div class="table-container container-xl">
+    <div class="d-flex justify-content-between align-items-center">
+      <h4 class="m-2">Player: {{ player?.player?.name }}</h4>
+      <div class="m-2">
+        <app-save-button
+          [idCategory]="player?.player?.id + ''"
+          [category]="'players'"
+          [userName]="userData?.id"
+          [seasonCategory]="playerSeason ?? undefined"
+        ></app-save-button>
+      </div>
+    </div>
+    <div class="player-info d-flex">
+      <div class="img-player">
+        <img [src]="player?.player?.photo" alt="photo" class="img-player" />
+      </div>
+      <div class="d-flex flex-wrap h-75 overflow-auto">
+        <p>
+          Name: <b>{{ player?.player?.name }}</b>
+        </p>
+        <p>
+          Age: <b>{{ player?.player?.age }}</b>
+        </p>
+        <p>
+          Birth: <b>{{ player?.player?.birth?.date }}</b>
+        </p>
+        <p>
+          Place: <b>{{ player?.player?.birth?.place }}</b>
+        </p>
+        <p>
+          Country: <b>{{ player?.player?.birth?.country }}</b>
+        </p>
+        <p>
+          First Name: <b>{{ player?.player?.firstname }}</b>
+        </p>
+        <p>
+          Last Name: <b>{{ player?.player?.lastname }}</b>
+        </p>
+        <p>
+          Id: <b>{{ player?.player?.id }}</b>
+        </p>
+        <p>
+          Injured: <b>{{ player?.player?.injured }}</b>
+        </p>
+        <p>
+          Nationality: <b>{{ player?.player?.nationality }}</b>
+        </p>
+        <p>
+          Height: <b>{{ player?.player?.height }}</b>
+        </p>
+        <p>
+          Weight: <b>{{ player?.player?.weight }}</b>
+        </p>
+      </div>
+    </div>
+
+    <div class="player-statistics overflow-auto">
+      <h4 class="p-3">Statistics</h4>
+      @for (item of player?.statistics; track $index) {
+        <h5 class="text-danger m-3">Statistic {{ $index + 1 }}</h5>
+        <hr class="m-3">
+        <div class="d-flex flex-wrap h-75">
+          <div class="odd-backg statistics">
+            <p>
+              Yellow Cards: <b>{{ item?.cards?.yellow }}</b>
+            </p>
+            <p>
+              Yellow-Red Cards: <b>{{ item?.cards?.yellowred }}</b>
+            </p>
+            <p>
+              Red Cards: <b>{{ item?.cards?.red }}</b>
+            </p>
+          </div>
+          <div class="odd-backg statistics">
+            <p>
+              Dribble Attempts: <b>{{ item?.dribbles?.attempts }}</b>
+            </p>
+            <p>
+              Successful Dribbles: <b>{{ item?.dribbles?.success }}</b>
+            </p>
+            <p>
+              Dribbles Past: <b>{{ item?.dribbles?.past }}</b>
+            </p>
+          </div>
+          <div class="odd-backg statistics">
+            <p>
+              Total Duels: <b>{{ item?.duels?.total }}</b>
+            </p>
+            <p>
+              Successful Duels: <b>{{ item?.duels?.success }}</b>
+            </p>
+            <p>
+              Duels Past: <b>{{ item?.duels?.past }}</b>
+            </p>
+          </div>
+          <div class="odd-backg statistics">
+            <p>
+              Drowned Fouls: <b>{{ item?.fouls?.drown }}</b>
+            </p>
+            <p>
+              Committed Fouls: <b>{{ item?.fouls?.committed }}</b>
+            </p>
+          </div>
+          <div class="odd-backg statistics">
+            <p>
+              Appearances: <b>{{ item?.games?.appearences }}</b>
+            </p>
+            <p>
+              Captain: <b>{{ item?.games?.captain }}</b>
+            </p>
+            <p>
+              Lineups: <b>{{ item?.games?.lineups }}</b>
+            </p>
+            <p>
+              Minutes Played: <b>{{ item?.games?.minutes }}</b>
+            </p>
+            <p>
+              Player Number: <b>{{ item?.games?.number }}</b>
+            </p>
+            <p>
+              Position: <b>{{ item?.games?.position }}</b>
+            </p>
+            <p>
+              Rating: <b>{{ item?.games?.rating }}</b>
+            </p>
+          </div>
+          <div class="odd-backg statistics">
+            <p>
+              Total Goals: <b>{{ item?.goals?.total }}</b>
+            </p>
+            <p>
+              Goals Conceded: <b>{{ item?.goals?.conceded }}</b>
+            </p>
+            <p>
+              Assists: <b>{{ item?.goals?.assists }}</b>
+            </p>
+            <p>
+              Saves: <b>{{ item?.goals?.saves }}</b>
+            </p>
+          </div>
+          <div class="odd-backg statistics">
+            <p>
+              League Country: <b>{{ item?.league?.country }}</b>
+            </p>
+            <p>
+              League Flag: <img class="country-img" [src]="item?.league?.flag " alt="flag">
+            </p>
+            <p>
+              League ID: <b>{{ item?.league?.id }}</b>
+            </p>
+            <p>
+              League Logo:  <img class="country-img" [src]=" item?.league?.logo " alt="logo">
+            </p>
+            <p>
+              League Name: <b>{{ item?.league?.name }}</b>
+            </p>
+            <p>
+              League Season: <b>{{ item?.league?.season }}</b>
+            </p>
+          </div>
+          <div class="odd-backg statistics">
+            <p>
+              Total Passes: <b>{{ item?.passes?.total }}</b>
+            </p>
+            <p>
+              Key Passes: <b>{{ item?.passes?.key }}</b>
+            </p>
+            <p>
+              Pass Accuracy: <b>{{ item?.passes?.accuracy }}</b>
+            </p>
+          </div>
+          <div class="odd-backg statistics">
+            <p>
+              Committed Penalties: <b>{{ item?.penalty?.commited }}</b>
+            </p>
+            <p>
+              Missed Penalties: <b>{{ item?.penalty?.missed }}</b>
+            </p>
+            <p>
+              Saved Penalties: <b>{{ item?.penalty?.saved }}</b>
+            </p>
+            <p>
+              Scored Penalties: <b>{{ item?.penalty?.scored }}</b>
+            </p>
+            <p>
+              Won Penalties: <b>{{ item?.penalty?.won }}</b>
+            </p>
+          </div>
+          <div class="odd-backg statistics">
+            <p>
+              Total Shots: <b>{{ item?.shots?.total }}</b>
+            </p>
+            <p>
+              Shots On Target: <b>{{ item?.shots?.on }}</b>
+            </p>
+          </div>
+          <div class="odd-backg statistics">
+            <p>
+              Substitutes In: <b>{{ item?.substitutes?.in }}</b>
+            </p>
+            <p>
+              Substitutes Out: <b>{{ item?.substitutes?.out }}</b>
+            </p>
+            <p>
+              Substitutes Bench: <b>{{ item?.substitutes?.bench }}</b>
+            </p>
+          </div>
+          <div class="odd-backg statistics">
+            <p>
+              Total Tackles: <b>{{ item?.tackles?.total }}</b>
+            </p>
+            <p>
+              Blocks: <b>{{ item?.tackles?.blocks }}</b>
+            </p>
+            <p>
+              Interceptions: <b>{{ item?.tackles?.interceptions }}</b>
+            </p>
+          </div>
+          <div class="odd-backg statistics">
+            <p>
+              Team ID: <b>{{ item?.team?.id }}</b>
+            </p>
+            <p>
+              Team Name: <b>{{ item?.team?.name }}</b>
+            </p>
+            <p>
+              Team Logo: <img class="country-img" [src]=" item?.team?.logo " alt="logo">
+            </p>
+          </div>
+          <hr class="m-3">
+        </div>
+        <br />
+      }
+    </div>
+  </div>
+</div>

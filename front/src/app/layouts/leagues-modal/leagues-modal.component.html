@@ -1,0 +1,53 @@
+<div
+  class="modal fade"
+  [id]="'modal'"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Name: {{ leagueInfo()?.league?.name }}
+          <app-save-button [idCategory]="leagueInfo()?.league?.id+''" [category]="'leagues'" [userName]="userId()"></app-save-button>
+
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex">
+          <p>Name: {{ leagueInfo()?.league?.name }}</p>
+          <img class="modal-logo" [src]="leagueInfo()?.league?.logo" alt="logo"/>
+        </div>
+        <p>Id: {{ leagueInfo()?.league?.id }}</p>
+        <p>Type: {{ leagueInfo()?.league?.type }}</p>
+        <div>
+          <p>Country: {{ leagueInfo()?.country?.name }}</p>
+          <img class="modal-logo" [src]="leagueInfo()?.country?.flag" alt="league" />
+        </div>
+        <h5>Seasons</h5>
+        @for (item of leagueInfo()?.seasons; track $index) {
+          <ol>
+            <li>Current: {{ item.current }}</li>
+            <li>Current: {{ item.start }}</li>
+            <li>Current: {{ item.end }}</li>
+            <li>Current: {{ item.year }}</li>
+          </ol>
+          <br />
+        }
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

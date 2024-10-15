@@ -1,0 +1,12 @@
+<div class="card" style="width: 15rem; height: 30rem">
+  <img [src]="venue()?.image" class="img-venue" [alt]="venue()?.name">
+  <div class="card-body">
+    <h5 class="card-title">Name: {{venue()?.name}}</h5>
+    <p class="card-text-venue">Country: {{venue()?.country}}</p>
+    <p class="card-text-venue">City: {{venue()?.city}}</p>
+    <p class="card-text-venue">Address: {{venue()?.address}}</p>
+    <p class="card-text-venue">Capacity: {{venue()?.capacity}}</p>
+    <p class="card-text-venue">Surface: {{venue()?.surface}}</p>
+    <a href="#" class="btn btn-primary">See more</a>
+  </div>
+</div>

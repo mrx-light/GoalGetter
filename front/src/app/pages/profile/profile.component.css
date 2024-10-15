@@ -1,0 +1,16 @@
+.profile-content {
+  margin:0 2rem 2rem;
+  background-color: #e4e6ef;
+  border-radius: 7px;
+  border: 1px solid dimgrey ;
+  padding: 2rem;
+}
+
+
+.profile-table {
+  background-color: white;
+  margin: 2rem 0;
+  border-radius: 7px;
+  min-height: 40rem;
+  width: 100%;
+}

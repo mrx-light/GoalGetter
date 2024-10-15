@@ -1,0 +1,40 @@
+.table-container {
+  margin: 1rem;
+  padding: 1rem;
+  border: 2px solid #3a3d42;
+  background-color: #e4e6ef;
+  border-radius: 7px;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.player-info {
+  height: 14rem;
+  margin: 1rem;
+  background-color: white;
+  border-radius: 7px;
+}
+
+.player-statistics {
+  margin: 1rem;
+  background-color: white;
+  border-radius: 7px;
+}
+
+.img-player {
+  width: 10rem;
+  height: 10rem;
+  background-color: white;
+  margin: 1rem;
+}
+
+div p {
+  font-weight: 400;
+  padding: .5rem;
+}
+
+.statistics {
+  border-radius: 7px ;
+  padding: 1rem;
+  display: flex;
+  margin: 1rem;
+}

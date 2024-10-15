@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "id": "mrx_light",
+      "name": "Petru",
+      "surname": "Malanici",
+      "email": "pmalanici@gmail.com",
+      "password": "123123",
+      "isActive": true
+    }
+  ],
+  "saved": [
+    {
+      "id": "mrx_light",
+      "leagues": [
+        "94",
+        "180"
+      ],
+      "teams": [
+        "591",
+        "3342"
+      ],
+      "players": [
+        {
+          "season": "2022",
+          "id": "56052"
+        },
+        {
+          "season": "2022",
+          "id": "56056"
+        },
+        {
+          "season": "2022",
+          "id": "123539"
+        }
+      ],
+      "coaches": [
+        "5507",
+        "5633"
+      ],
+      "venues": [
+        "232"
+      ]
+    }
+  ]
+}

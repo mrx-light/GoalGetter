@@ -1,0 +1,48 @@
+<div
+  class="modal fade"
+  id="modal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">
+          Name: {{ teamInfo()?.team?.name }}
+          <app-save-button [idCategory]="teamInfo()?.team?.id+''" [category]="'teams'" [userName]="userId()"></app-save-button>
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h5>Team</h5>
+          <p>Name: {{ teamInfo()?.team?.name }}</p>
+          <img class="w-50" [src]="teamInfo()?.team?.logo" alt="logo" />
+        <p>Id: {{ teamInfo()?.team?.id }}</p>
+        <p>Founded: {{ teamInfo()?.team?.founded }}</p>
+        <p>Country: {{ teamInfo()?.team?.country }}</p>
+        <p>Code: {{ teamInfo()?.team?.code }}</p>
+        <p>National: {{ teamInfo()?.team?.national }}</p>
+        <h5>Venue</h5>
+          <p>Name: {{ teamInfo()?.venue?.name }}</p>
+          <img class="w-75" [src]="teamInfo()?.venue?.image" alt="logo" />
+        <p>Id: {{ teamInfo()?.venue?.id }}</p>
+        <p>City: {{ teamInfo()?.venue?.city }}</p>
+        <p>Capacity: {{ teamInfo()?.venue?.capacity }}</p>
+        <p>Surface: {{ teamInfo()?.venue?.surface }}</p>
+        <p>Address: {{ teamInfo()?.venue?.address }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

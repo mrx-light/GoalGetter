@@ -1,0 +1,13 @@
+<div class="card" style="width: 15rem ;height: 23rem">
+  <div class="card-body">
+    <h5 class="card-title">Name: {{ league()?.league?.name}}</h5>
+    <img [src]="league()?.league?.logo" alt="photo" class="img-league">
+    <p class="card-text-profile">Country: {{ league()?.country?.name  }}</p>
+    <p class="card-text-profile">Season: {{ league()?.seasons?.[0]?.year }}</p>
+    <p class="card-text-profile">Start: {{ league()?.seasons?.[0]?.start  }}</p>
+    <p class="card-text-profile">End: {{ league()?.seasons?.[0]?.end }}</p>
+    <p class="card-text-profile">Current: {{ league()?.seasons?.[0]?.current  }}</p>
+    <a href="#" class="btn btn-primary">See more</a>
+
+  </div>
+</div>

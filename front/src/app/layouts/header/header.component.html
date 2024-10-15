@@ -1,0 +1,43 @@
+<div class="header">
+<div class=" d-flex justify-content-between align-items-center">
+  <img  src="assets/img/banner.png" alt="logo" class="logo cursor-p" routerLink="/main" />
+  <div class="d-flex header-content align-items-center">
+    <button class="btn btn-secondary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive"><i class="bi bi-list"></i></button>
+    <div class="offcanvas-lg offcanvas-end p-0" tabindex="-1" id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasResponsiveLabel">Header</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body ">
+        @if(!loginRegistration()) {
+          <div class="cursor-p"  routerLink="/login">Login</div>
+          <div class="cursor-p"  routerLink="/registration">Registration</div>
+        }@else {
+            <div class="dropdown ">
+              <button class="btn btn-secondary fs-5 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Categories
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" routerLink="/leagues">Leagues</a></li>
+                <li><a class="dropdown-item" routerLink="/teams">Teams</a></li>
+                <li><a class="dropdown-item" routerLink="/players">Players</a></li>
+                <li><a class="dropdown-item" routerLink="/coaches">Coaches</a></li>
+                <li><a class="dropdown-item" routerLink="/venues">Venues</a></li>
+              </ul>
+            </div>
+            <div class="cursor-p align-text-bottom"  routerLink="/profile">Profile: {{ userId() }}</div>
+            <div class="cursor-p align-text-bottom" (click)="logOut()">LogOut</div>
+            <div class="position-relative search">
+              <input
+                type="text"
+                class="form-control input-header"
+                placeholder="Search"
+              />
+              <i class="bi bi-search search-icon"></i>
+            </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+</div>

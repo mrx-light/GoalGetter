@@ -1,0 +1,473 @@
+<app-error-toasts #error></app-error-toasts>
+<app-warning-toasts #warning></app-warning-toasts>
+<app-header [userId]="user?.id"></app-header>
+
+<div class="container w-100">
+  <div class="d-flex justify-content-between align-items-center ms-4 me-4 pt-4">
+    <h2 class="m-2">
+      Profile: <b>{{ user?.id }}</b>
+    </h2>
+    <div class="d-flex">
+      <h3
+        class="btn btn-secondary m-2 p-3 fs-4 cursor-p"
+        (click)="toggleProfileBox(0)"
+      >
+        Liked Categories
+      </h3>
+      <h3
+        class="btn btn-secondary m-2 p-3 fs-4 cursor-p"
+        (click)="toggleProfileBox(1)"
+      >
+        Profile Info
+      </h3>
+    </div>
+  </div>
+  <div class="profile-content">
+    @if (show === 0) {
+      <button
+        class="btn btn-secondary d-lg-none"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#categories"
+        aria-controls="categories"
+      >
+        <i class="bi bi-card-list"></i>
+      </button>
+
+      <div
+        class="offcanvas-lg offcanvas-end"
+        tabindex="-1"
+        id="categories"
+        aria-labelledby="offcanvasResponsiveLabel"
+      >
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasResponsiveLabel">
+            Categories
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="offcanvas"
+            data-bs-target="#categories"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="offcanvas-body">
+          <div class="d-lg-flex justify-content-between w-100">
+            <h3
+              class="cursor-p btn btn-light fs-3 p-3"
+              (click)="setCategory('leagues')"
+            >
+              Leagues
+            </h3>
+            <h3
+              class="cursor-p btn btn-light fs-3 p-3"
+              (click)="setCategory('teams')"
+            >
+              Teams
+            </h3>
+            <h3
+              class="cursor-p btn btn-light fs-3 p-3"
+              (click)="setCategory('players')"
+            >
+              Players
+            </h3>
+            <h3
+              class="cursor-p btn btn-light fs-3 p-3"
+              (click)="setCategory('coaches')"
+            >
+              Coaches
+            </h3>
+            <h3
+              class="cursor-p btn btn-light fs-3 p-3"
+              (click)="setCategory('venues')"
+            >
+              Venues
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class=" ">
+        <table
+          class="d-flex flex-column mb-5 profile-table w-100 overflow-auto"
+        >
+          <thead>
+            <h4 class="text-danger text-center p-4">{{ errorMessage }}</h4>
+          </thead>
+          <tbody>
+            @if (category === "players") {
+              @if (playersArr.length) {
+                <tr>
+                  <td></td>
+                </tr>
+                @for (
+                  item of playersArr
+                    | paginate: { itemsPerPage: 10, currentPage: page };
+                  track $index
+                ) {
+                  <tr>
+                    <img [src]="item.player.photo" [alt]="item.player.name" />
+                    <td>{{ item.player.id }}</td>
+                    <td>{{ item.player.name }}</td>
+                    <td>{{ item.player.age }}</td>
+                    <td>{{ item.player.weight }}</td>
+                    <td>{{ item.player.height }}</td>
+                    <td>{{ item.statistics[0].goals.total }}</td>
+                    <td>{{ item.statistics[0].duels.total }}</td>
+                    <td>{{ item.statistics[0].cards.yellow }}</td>
+                    <td>{{ item.statistics[0].cards.red }}</td>
+                    <td (click)="removeSaved(item.player.id + '')">
+                      <i class="bi bi-trash"></i>
+                    </td>
+                  </tr>
+                }
+              }
+            } @else if (category === "leagues") {
+              @if (leaguesArr.length) {
+                @for (
+                  item of leaguesArr
+                    | paginate: { itemsPerPage: 10, currentPage: page };
+                  track $index
+                ) {
+                  <tr>
+                    <td>{{ item?.league?.id }}</td>
+                    <td>
+                      <img
+                        [src]="item?.country?.flag"
+                        class="img-flag"
+                        alt="photo"
+                      />{{ item?.country?.name }}
+                    </td>
+                    <td>
+                      <img
+                        [src]="item?.league?.logo"
+                        class="img-name"
+                        alt="photo"
+                      />{{ item?.league?.name }}
+                    </td>
+
+                    <td>{{ item?.seasons?.[0]?.year }}</td>
+                    <td>{{ item?.seasons?.[0]?.start }}</td>
+                    <td>{{ item?.seasons?.[0]?.end }}</td>
+                    <td>{{ item?.seasons?.[0]?.current }}</td>
+                    <td>
+                      <i
+                        class="bi bi-trash"
+                        (click)="removeSaved(item?.league?.id + '')"
+                      ></i>
+                    </td>
+                  </tr>
+                }
+              }
+            } @else if (category === "teams") {
+              @if (teamsArr.length) {
+                @for (
+                  item of teamsArr
+                    | paginate: { itemsPerPage: 10, currentPage: page };
+                  track $index
+                ) {
+                  <tr>
+                    <td>{{ item.team.id }}</td>
+                    <td>
+                      {{ item.team.name }}
+                      <img [src]="item.team.logo" alt="logo" class="img-name" />
+                    </td>
+                    <td>{{ item.team.country }}</td>
+                    <td>{{ item.team.code }}</td>
+                    <td>{{ item.team.founded }}</td>
+                    <td>{{ item.team.national }}</td>
+                    <td>{{ item.venue.surface }}</td>
+                    <td>{{ item.venue.city }}</td>
+                    <td>{{ item.venue.capacity }}</td>
+                    <td (click)="removeSaved(item.team.id + '')">
+                      <i class="bi bi-trash"></i>
+                    </td>
+                  </tr>
+                }
+              }
+            } @else if (category === "coaches") {
+              @if (coachesArr.length) {
+                @for (
+                  item of coachesArr
+                    | paginate: { itemsPerPage: 10, currentPage: page };
+                  track $index
+                ) {
+                  <tr>
+                    <td><img [src]="item?.photo" alt="photo" /></td>
+                    <td>{{ item?.id }}</td>
+                    <td>{{ item?.name }}</td>
+                    <td>{{ item?.age }}</td>
+                    <td>{{ item?.team?.name }}</td>
+                    <td>{{ item?.birth?.date }}</td>
+                    <td (click)="removeSaved(item.id + '')">
+                      <i class="bi bi-trash"></i>
+                    </td>
+                  </tr>
+                }
+              }
+            } @else if (category === "venues") {
+              @if (venuesArr.length) {
+                @for (
+                  item of venuesArr
+                    | paginate: { itemsPerPage: 10, currentPage: page };
+                  track $index
+                ) {
+                  <tr>
+                    <td>
+                      <img [src]="item.image" alt="logo" class="country-img" />
+                    </td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.country }}</td>
+                    <td>{{ item.capacity }}</td>
+                    <td>{{ item.address }}</td>
+                    <td>{{ item.surface }}</td>
+                    <td>{{ item.city }}</td>
+                    <td (click)="removeSaved(item.id + '')">
+                      <i class="bi bi-trash"></i>
+                    </td>
+                  </tr>
+                }
+              }
+            } @else {
+              <h3 class="text-danger p-4 text-center">Something is wrong</h3>
+            }
+          </tbody>
+        </table>
+        <div class="mt-auto bg-light w-50 p-2 d-flex align-items-center">
+          <pagination-controls
+            (pageChange)="page = $event"
+          ></pagination-controls>
+        </div>
+      </div>
+    }
+    @if (show === 1) {
+      <form [formGroup]="replaceForm">
+        <div class="mb-3">
+          <label for="name" class="form-label"
+            >Name: <b>{{ user?.name }}</b></label
+          >
+          <input
+            formControlName="name"
+            type="text"
+            class="form-control"
+            id="name"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        @if (
+          replaceForm.controls.name.invalid &&
+          (replaceForm.controls.name.dirty ||
+            !replaceForm.controls.name.untouched)
+        ) {
+          @if (replaceForm.controls.name.errors?.["required"]) {
+            <p class="validation">This field is required</p>
+          }
+          @if (replaceForm.controls.name.errors?.["minlength"]) {
+            <p class="validation">The name is too small</p>
+          }
+          @if (replaceForm.controls.name.errors?.["maxlength"]) {
+            <p class="validation">The name is too big</p>
+          }
+          @if (replaceForm.controls.name.errors?.["used"]) {
+            <p class="validation">
+              {{ replaceForm.controls.name.errors?.["used"] }}
+            </p>
+          }
+        }
+        <button
+          [disabled]="!replaceForm.controls.name.valid"
+          (click)="updateName()"
+          type="submit"
+          class="btn btn-primary"
+        >
+          Change Name
+        </button>
+        <hr />
+        <div class="mb-3">
+          <label for="surname" class="form-label"
+            >Surname: <b>{{ user?.surname }}</b></label
+          >
+          <input
+            formControlName="surname"
+            type="text"
+            class="form-control"
+            id="surname"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        @if (
+          replaceForm.controls.surname.invalid &&
+          (replaceForm.controls.surname.dirty ||
+            !replaceForm.controls.surname.untouched)
+        ) {
+          @if (replaceForm.controls.surname.errors?.["required"]) {
+            <p class="validation">This field is required</p>
+          }
+          @if (replaceForm.controls.surname.errors?.["minlength"]) {
+            <p class="validation">The name is too small</p>
+          }
+          @if (replaceForm.controls.surname.errors?.["maxlength"]) {
+            <p class="validation">The name is too big</p>
+          }
+          @if (replaceForm.controls.surname.errors?.["used"]) {
+            <p class="validation">
+              {{ replaceForm.controls.surname.errors?.["used"] }}
+            </p>
+          }
+        }
+        <button
+          [disabled]="!replaceForm.controls.surname.valid"
+          (click)="updateSurname()"
+          type="submit"
+          class="btn btn-primary"
+        >
+          Change Surname
+        </button>
+        <hr />
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label"
+            >Email: <b>{{ user?.email }} </b></label
+          >
+          <input
+            formControlName="email"
+            type="email"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        @if (
+          replaceForm.controls.email.invalid &&
+          (replaceForm.controls.email.dirty ||
+            !replaceForm.controls.email.untouched)
+        ) {
+          @if (replaceForm.controls.email.errors?.["required"]) {
+            <p class="validation">This field is required</p>
+          }
+          @if (replaceForm.controls.email.errors?.["email"]) {
+            <p class="validation">This field should be email only</p>
+          }
+          @if (replaceForm.controls.email.errors?.["used"]) {
+            <p class="validation">
+              {{ replaceForm.controls.email.errors?.["used"] }}
+            </p>
+          }
+        }
+        <button
+          [disabled]="!replaceForm.controls.email.valid"
+          (click)="updateEmail()"
+          type="submit"
+          class="btn btn-primary"
+        >
+          Change Email
+        </button>
+        <hr />
+        <div class="mb-3">
+          <label for="password" class="form-label">Old Password</label>
+          <input
+            formControlName="oldPassword"
+            type="password"
+            class="form-control"
+            id="password"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        @if (
+          replaceForm.controls.oldPassword.invalid &&
+          (replaceForm.controls.oldPassword.dirty ||
+            !replaceForm.controls.oldPassword.untouched)
+        ) {
+          @if (replaceForm.controls.oldPassword.errors?.["required"]) {
+            <p class="validation">This field is required</p>
+          }
+          @if (replaceForm.controls.oldPassword.errors?.["minlength"]) {
+            <p class="validation">The name is too small</p>
+          }
+          @if (replaceForm.controls.oldPassword.errors?.["maxlength"]) {
+            <p class="validation">The name is too big</p>
+          }
+          @if (replaceForm.controls.oldPassword.errors?.["used"]) {
+            <p class="validation">
+              {{ replaceForm.controls.oldPassword.errors?.["used"] }}
+            </p>
+          }
+        }
+        <div class="mb-3">
+          <label for="newPassword" class="form-label">New Password</label>
+          <input
+            formControlName="newPassword"
+            type="password"
+            class="form-control"
+            id="newPassword"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        @if (
+          replaceForm.controls.newPassword.invalid &&
+          (replaceForm.controls.newPassword.dirty ||
+            !replaceForm.controls.newPassword.untouched)
+        ) {
+          @if (replaceForm.controls.newPassword.errors?.["required"]) {
+            <p class="validation">This field is required</p>
+          }
+          @if (replaceForm.controls.newPassword.errors?.["minlength"]) {
+            <p class="validation">The name is too small</p>
+          }
+          @if (replaceForm.controls.newPassword.errors?.["maxlength"]) {
+            <p class="validation">The name is too big</p>
+          }
+          @if (replaceForm.controls.newPassword.errors?.["used"]) {
+            <p class="validation">
+              {{ replaceForm.controls.newPassword.errors?.["used"] }}
+            </p>
+          }
+        }
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label"
+            >Confirm new Password</label
+          >
+          <input
+            formControlName="confirmPassword"
+            type="password"
+            class="form-control"
+            id="confirmPassword"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        @if (
+          replaceForm.controls.confirmPassword.invalid &&
+          (replaceForm.controls.confirmPassword.dirty ||
+            !replaceForm.controls.confirmPassword.untouched)
+        ) {
+          @if (replaceForm.controls.confirmPassword.errors?.["required"]) {
+            <p class="validation">This field is required</p>
+          }
+          @if (replaceForm.controls.confirmPassword.errors?.["minlength"]) {
+            <p class="validation">The name is too small</p>
+          }
+          @if (replaceForm.controls.confirmPassword.errors?.["maxlength"]) {
+            <p class="validation">The name is too big</p>
+          }
+          @if (replaceForm.controls.confirmPassword.errors?.["used"]) {
+            <p class="validation">
+              {{ replaceForm.controls.confirmPassword.errors?.["used"] }}
+            </p>
+          }
+        }
+        <button
+          [disabled]="
+            !replaceForm.controls.confirmPassword.valid &&
+            !replaceForm.controls.oldPassword.valid &&
+            !replaceForm.controls.newPassword.valid
+          "
+          (click)="updatePassword()"
+          type="submit"
+          class="btn btn-primary"
+        >
+          Change Password
+        </button>
+      </form>
+    }
+  </div>
+</div>
